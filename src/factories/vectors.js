@@ -6,6 +6,7 @@
     /// Declare Vector factory
 
     const { factory, prototype, symbols } = createFactory();
+    const { $relativeTo } = symbols;
 
     JOY.Vector = factory;
 
@@ -14,6 +15,7 @@
     await declarationsCompletion;
 
     const { getDescriptors } = JOY.core.helpers.objects;
+    const { Complex } = JOY;
     const { $x, $y } = symbols;
 
     Object.defineProperties(prototype, getDescriptors({
@@ -29,8 +31,45 @@
 
         get y() {
             return this[$y];
+        },
+
+        scale(num) {
+            return factory(this[$x] * num, this[$y] * num);
+        },
+
+        relativeTo(position, rotation) {
+
+            if (!Complex.proto.isPrototypeOf(rotation)) {
+                throw TypeError('complex num expected as rotation');
+            }
+
+            if (!prototype.isPrototypeOf(position)) {
+                throw TypeError('vector expected as position');
+            }
+
+            return this[$relativeTo](position, rotation);
+
+        },
+
+        [$relativeTo](position, rotation) {
+            const x = this[$x];
+            const y = this[$y];
+            const rRe = rotation.re;
+            const rIm = rotation.im;
+            return factory(
+                position[$x] + rRe * x - rIm * y,
+                position[$y] + rIm * x + rRe * y
+            );
         }
 
     }));
+
+    Object.assign(factory, {
+        front: factory(0, 1),
+        back: factory(0, -1),
+        right: factory(1, 0),
+        left: factory(-1, 0),
+        zero: factory(0, 0)
+    });
 
 })();
