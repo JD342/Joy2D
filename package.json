@@ -1,0 +1,15 @@
+{
+  "name": "joy2d",
+  "version": "2.0.0",
+  "scripts": {
+    "build": "node --harmony scripts build"
+  },
+  "devDependencies": {
+    "async-iteration": "^1.0.2",
+    "babel-core": "^6.21.0",
+    "babel-preset-babili": "0.0.9",
+    "concat-with-sourcemaps": "^1.0.4",
+    "mz": "^2.6.0",
+    "rmfr": "^1.0.1"
+  }
+}

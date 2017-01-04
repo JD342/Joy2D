@@ -1,6 +1,7 @@
 {
-    "esversion": 6,
+    "esversion": 7,
     "funcscope": true,
     "withstmt": true,
-    "proto": true
+    "proto": true,
+    "moz": true
 }

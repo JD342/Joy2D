@@ -1,0 +1,7 @@
+[
+    "head.js",
+    "core/helpers/...",
+    "factories.js",
+    "...",
+    "tail.js"
+]
