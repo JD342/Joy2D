@@ -1,6 +1,8 @@
 // Logic for creating factories
 //
-{
+JOY.$(function* (ns) {
+
+    const { declare } = yield ns;
 
     const prototypes = new WeakMap();
     const internalSymbols = new WeakSet();
@@ -100,10 +102,12 @@
         };
         factory.proto = prototype;
 
-        return { factory, prototype, symbols };
+        return [ factory, { prototype, symbols } ];
 
     };
 
-    JOY.Factories = Object.freeze({ $init, createFactory });
+    declare(ns.factories, { $init, createFactory });
 
-}
+    JOY.factories = Object.freeze({ $init, createFactory });
+
+});

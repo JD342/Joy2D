@@ -1,22 +1,20 @@
-(async () => {
+JOY.$(function* (ns) {
 
-    const { declarationsCompletion } = JOY.core;
-    const { $init, createFactory } = JOY.factories;
+    const { declare }              = yield ns;
+    const { $init, createFactory } = yield ns.factories;
 
     /// Declare Vector factory
 
-    const { factory, prototype, symbols } = createFactory();
+    const [ Vector, { prototype, symbols } ] = createFactory();
     const { $relativeTo } = symbols;
 
-    JOY.core.symbols.vectors = { $relativeTo };
-    JOY.Vector = factory;
+    declare(ns.vectors, { Vector, $relativeTo });
 
     /// Populate prototype and define factory constants
 
-    await declarationsCompletion;
+    const { getDescriptors } = yield ns.helpers.objects;
+    const { Complex }        = yield ns.complexNums;
 
-    const { getDescriptors } = JOY.core.helpers.objects;
-    const { Complex } = JOY;
     const { $x, $y } = symbols;
 
     Object.defineProperties(prototype, getDescriptors({
@@ -35,7 +33,7 @@
         },
 
         scale(num) {
-            return factory(this[$x] * num, this[$y] * num);
+            return Vector(this[$x] * num, this[$y] * num);
         },
 
         relativeTo(position, rotation) {
@@ -57,7 +55,7 @@
             const y = this[$y];
             const rRe = rotation.re;
             const rIm = rotation.im;
-            return factory(
+            return Vector(
                 position[$x] + rRe * x - rIm * y,
                 position[$y] + rIm * x + rRe * y
             );
@@ -65,15 +63,16 @@
 
     }));
 
-    Object.assign(factory, {
-        front: factory(0, 1),
-        back: factory(0, -1),
-        right: factory(1, 0),
-        left: factory(-1, 0),
-        zero: factory(0, 0)
+    Object.assign(Vector, {
+        front: Vector(0, 1),
+        back: Vector(0, -1),
+        right: Vector(1, 0),
+        left: Vector(-1, 0),
+        zero: Vector(0, 0)
     });
 
     Object.freeze(prototype);
-    Object.freeze(factory);
+    Object.freeze(Vector);
+    JOY.Vector = Vector;
 
-})();
+});

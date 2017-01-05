@@ -1,19 +1,16 @@
-(async () => {
-
-    const { declarationsCompletion } = JOY.core;
-    const { $init, createFactory } = JOY.factories;
+JOY.$(function* (ns) {
 
     /// Declare Event factory
 
-    const { factory, prototype, symbols } = createFactory();
+    const { declare }              = yield ns;
+    const { $init, createFactory } = yield ns.factories;
+
+    const [ Event, { prototype, symbols } ] = createFactory();
     const { $fire, $isObserved } = symbols;
 
-    JOY.core.symbols.events = { $fire, $isObserved };
-    JOY.core.Event = factory;
+    declare(ns.events, { Event, $fire, $isObserved });
 
     /// Populate prototype
-
-    await declarationsCompletion;
 
     const {
         $resolvers,
@@ -144,4 +141,4 @@
 
     Object.freeze(prototype);
 
-})();
+});

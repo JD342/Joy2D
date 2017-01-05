@@ -1,7 +1,5 @@
 [
-    "head.js",
-    "core/helpers/...",
-    "factories.js",
+    "initialize.js",
     "...",
-    "tail.js"
+    "finalize.js"
 ]

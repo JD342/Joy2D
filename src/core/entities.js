@@ -1,11 +1,11 @@
-(async () => {
+JOY.$(function* (ns) {
 
-    const { declarationsCompletion } = JOY.core;
-    const { $init, createFactory } = JOY.factories;
+    const { declare }              = yield ns;
+    const { $init, createFactory } = yield ns.factories;
 
     /// Declare Entity factory
 
-    const { factory, prototype, symbols } = createFactory();
+    const [ Entity, { prototype, symbols } ] = createFactory();
 
     const { $broundingRadius } = symbols;
     const E_INS = Symbol('Entity Insertion');
@@ -13,19 +13,17 @@
     const C_INS = Symbol('Component Insertion');
     const C_REM = Symbol('Component Removal');
 
-    Object.assign(factory, { E_INS, E_REM, C_INS, C_REM });
+    Object.assign(Entity, { E_INS, E_REM, C_INS, C_REM });
 
-    JOY.core.symbols.entities = { $broundingRadius };
-    JOY.Entity = factory;
+    declare(ns.entities, { Entity, $broundingRadius });
 
     /// Populate prototype
 
-    await declarationsCompletion;
-
-    const { EventHandler, Component, Vector } = JOY;
-    const { MultiMap } = JOY.core;
-    const { getDescriptors } = JOY.core.helpers.objects;
-    const { emptyFrozenArr } = JOY.core.helpers.arrays;
+    const { getDescriptors } = yield ns.helpers.objects;
+    const { emptyFrozenArr } = yield ns.helpers.arrays;
+    const { EventHandler }   = yield ns.evHandlers;
+    const { Component }      = yield ns.components;
+    const { MultiMap }       = yield ns.multiMaps;
 
     const {
         $name,       $nameChange,
@@ -434,6 +432,7 @@
     }));
 
     Object.freeze(prototype);
-    Object.freeze(factory);
+    Object.freeze(Entity);
+    JOY.Entity = Entity;
 
-})();
+});

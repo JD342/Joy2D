@@ -1,13 +1,13 @@
-(async () => {
+JOY.$(function* (ns) {
 
-    const { declarationsCompletion } = JOY.Core;
-    const { $init, createFactory } = JOY.Factories;
+    const { declare }              = yield ns;
+    const { $init, createFactory } = yield ns.factories;
 
     /// Declare EventHandler factory
 
-    const { factory, prototype, symbols } = createFactory();
+    const [ EventHandler, { prototype, symbols } ] = createFactory();
 
-    Object.assign(factory, {
+    Object.assign(EventHandler, {
         race,
         listen,
         unlink,
@@ -15,16 +15,14 @@
         defineGetters
     });
 
-    JOY.EventHandler = factory;
+    declare(ns.evHandlers, { EventHandler });
 
     /// Implement factory functions and populate prototype
 
-    await declarationsCompletion;
+    const { getDescriptors } = yield ns.helpers.objects;
+    const { zip } = yield ns.helpers.iterables;
+    const { Event, $fire, $isObserved } = yield ns.events;
 
-    const { Event } = JOY.core;
-    const { $fire, $isObserved } = JOY.core.symbols.events;
-    const { getDescriptors } = JOY.Helpers.Objects;
-    const { zip } = JOY.Helpers.Iterables;
     const { $event } = symbols;
 
     async function race(events) {
@@ -52,7 +50,7 @@
             get() {
                 if (symbol in this) return this[symbol].events;
                 const opts = callback() || {};
-                const handler = factory(opts);
+                const handler = EventHandler(opts);
                 this[symbol] = handler;
                 return handler.event;
             },
@@ -108,6 +106,7 @@
     }));
 
     Object.freeze(prototype);
-    Object.freeze(factory);
+    Object.freeze(EventHandler);
+    JOY.EventHandler = EventHandler;
 
-})();
+});

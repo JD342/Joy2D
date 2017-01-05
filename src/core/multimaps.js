@@ -1,22 +1,15 @@
-(async () => {
-
-    const { declarationsCompletion } = JOY.Core;
-    const { $init, createFactory } = JOY.Factories;
+JOY.$(function* (ns) {
 
     /// Declare MultiMap factory
 
-    const { factory, prototype, symbols } = createFactory();
+    const { declare }              = yield ns;
+    const { $init, createFactory } = yield ns.factories;
 
-    JOY.core.MultiMap = factory;
+    const [ MultiMap, { prototype, symbols } ] = createFactory();
+
+    declare(ns.multimaps, { MultiMap });
 
     /// Populate prototype
-
-    await declarationsCompletion;
-
-    const {
-        createIterableFrom,
-        createEmptyIterable
-    } = JOY.core.helpers.iterables;
 
     const { $map } = symbols;
 
@@ -36,8 +29,8 @@
         get(key) {
             const map = this[$map];
             const set = map.get(key);
-            if (set === undefined) return createEmptyIterable();
-            return createIterableFrom(set);
+            if (set === undefined) return function* () {};
+            return function* () { yield* set; };
         },
 
         delete(...args) {
@@ -89,4 +82,4 @@
 
     });
 
-})();
+});
