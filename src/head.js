@@ -1,12 +1,12 @@
 // Module declaration
 //
 const JOY = {
-    Core: {
-        Helpers: {},
-        Symbols: {},
+    core: {
+        helpers: {},
+        symbols: {},
         declarationsCompletion: new Promise((res) => {
-            JOY.Core.resolveDeclarationsCompletion = res;
+            JOY.core.resolveDeclarationsCompletion = res;
         })
     },
-    Constants: {}
+    constants: {}
 };
