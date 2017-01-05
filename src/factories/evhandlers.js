@@ -7,7 +7,13 @@
 
     const { factory, prototype, symbols } = createFactory();
 
-    Object.assign(factory, { race, listen, unlink });
+    Object.assign(factory, {
+        race,
+        listen,
+        unlink,
+        defineGetter,
+        defineGetters
+    });
 
     JOY.EventHandler = factory;
 
@@ -34,6 +40,47 @@
 
     function unlink(events, obj) {
         for (const evt of events) evt.unlink(obj);
+    }
+
+    function defineGetter(
+        obj,
+        key,
+        symbol,
+        { callback = () => {}, enumerable = true, configurable = true } = {}
+    ) {
+        Object.defineProperty(obj, key, {
+            get() {
+                if (symbol in this) return this[symbol].events;
+                const opts = callback() || {};
+                const handler = factory(opts);
+                this[symbol] = handler;
+                return handler.event;
+            },
+            enumerable,
+            configurable
+        });
+    }
+
+    function defineGetters(obj, getters) {
+
+        for (const k in getters) {
+
+            const [key, symbol] = k;
+
+            const {
+                callback = () => {},
+                enumerable = true,
+                configurable = true
+            } = getters[k];
+
+            defineGetter(obj, key, symbol, {
+                callback,
+                enumerable,
+                configurable
+            });
+
+        }
+
     }
 
     Object.defineProperties(prototype, getDescriptors({
