@@ -8,6 +8,7 @@
     const { factory, prototype, symbols } = createFactory();
     const { $relativeTo } = symbols;
 
+    JOY.core.symbols.vectors = { $relativeTo };
     JOY.Vector = factory;
 
     /// Populate prototype
