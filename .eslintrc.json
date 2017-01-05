@@ -9,6 +9,7 @@
         "semi": ["error", "always"],
         "no-unused-vars": "off",
         "no-console": "off",
-        "no-constant-condition": ["error", { "checkLoops": false }]
+        "no-constant-condition": ["error", { "checkLoops": false }],
+        "require-yield": "off"
     }
 }
