@@ -8,7 +8,6 @@
     const { factory, prototype, symbols } = createFactory();
 
     Object.assign(factory, { race, listen, unlink });
-    Object.freeze(factory);
 
     JOY.EventHandler = factory;
 
@@ -62,5 +61,6 @@
     }));
 
     Object.freeze(prototype);
+    Object.freeze(factory);
 
 })();

@@ -14,7 +14,6 @@
     const C_REM = Symbol('Component Removal');
 
     Object.assign(factory, { E_INS, E_REM, C_INS, C_REM });
-    Object.freeze(factory);
 
     JOY.core.symbols.entities = { $broundingRadius };
     JOY.Entity = factory;
@@ -435,5 +434,6 @@
     }));
 
     Object.freeze(prototype);
+    Object.freeze(factory);
 
 })();
