@@ -73,4 +73,7 @@
         zero: factory(0, 0)
     });
 
+    Object.freeze(prototype);
+    Object.freeze(factory);
+
 })();
