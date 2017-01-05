@@ -41,7 +41,7 @@
         relativeTo(position, rotation) {
 
             if (!Complex.proto.isPrototypeOf(rotation)) {
-                throw TypeError('complex num expected as rotation');
+                throw TypeError('complex number expected as rotation');
             }
 
             if (!prototype.isPrototypeOf(position)) {
