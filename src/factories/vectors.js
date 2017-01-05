@@ -11,7 +11,7 @@
     JOY.core.symbols.vectors = { $relativeTo };
     JOY.Vector = factory;
 
-    /// Populate prototype
+    /// Populate prototype and define factory constants
 
     await declarationsCompletion;
 
