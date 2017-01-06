@@ -6,14 +6,15 @@ JOY.$(function* (ns) {
     /// Declare Vector factory
 
     const [ Vector, { prototype, symbols } ] = createFactory();
-    const { $relativeTo } = symbols;
+    const { $vecRelativeTo } = symbols;
 
-    declare(ns.vectors, { Vector, $relativeTo });
+    declare(ns.vectors, { Vector, $vecRelativeTo });
 
     /// Populate prototype and define factory constants
 
-    const { getDescriptors } = yield ns.helpers.objects;
-    const { Complex }        = yield ns.complexNums;
+    const { getDescriptors }                    = yield ns.helpers.objects;
+    const { Transformation, $vector, $complex } = yield ns.transformations;
+    const { $im, $re }                          = yield ns.complexNums;
 
     const { $x, $y } = symbols;
 
@@ -36,29 +37,26 @@ JOY.$(function* (ns) {
             return Vector(this[$x] * num, this[$y] * num);
         },
 
-        relativeTo(position, rotation) {
+        relativeTo(tr) {
 
-            if (!Complex.proto.isPrototypeOf(rotation)) {
-                throw TypeError('complex number expected as rotation');
+            if (!Transformation.proto.isPrototypeOf(tr)) {
+                throw TypeError('Transformation expected');
             }
 
-            if (!prototype.isPrototypeOf(position)) {
-                throw TypeError('vector expected as position');
-            }
-
-            return this[$relativeTo](position, rotation);
+            return this[$vecRelativeTo](tr);
 
         },
 
-        [$relativeTo](position, rotation) {
+        [$vecRelativeTo](tr) {
             const x = this[$x];
             const y = this[$y];
-            const rRe = rotation.re;
-            const rIm = rotation.im;
-            return Vector(
-                position[$x] + rRe * x - rIm * y,
-                position[$y] + rIm * x + rRe * y
-            );
+            const tV = tr[$vector];
+            const tX = tV[$x];
+            const tY = tV[$y];
+            const tC = tr[$complex];
+            const tIm = tC[$im];
+            const tRe = tC[$re];
+            return Vector(tX + tRe * x - tIm * y, tY + tIm * x + tRe * y);
         }
 
     }));
