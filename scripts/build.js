@@ -5,22 +5,16 @@ const rmfr = require('rmfr');
 const Concat = require('concat-with-sourcemaps');
 const AsyncIteration = require('async-iteration');
 
-const mainDir =              resolve(__dirname, '..');
-const srcDir =               join(mainDir, 'src');
-const buildDir =             join(mainDir,'build');
-const licenseFile =          join(mainDir, 'LICENSE');
-const packageFile =          join(mainDir, 'package.json');
-const orderFile =            join(srcDir, 'order.json');
-const uncompressedBuildDir = join(buildDir, 'uncompressed');
-const uncompressedBuild =    join(uncompressedBuildDir, 'joy2d.js');
-const uncompressedBuildMap = join(uncompressedBuildDir, 'joy2d.js.map');
-const minifiedBuildDir     = join(buildDir, 'minified');
-const minifiedBuild =        join(minifiedBuildDir, 'joy2d.min.js');
-const minifiedBuildMap =     join(minifiedBuildDir, 'joy2d.min.js.map');
+const {
+    SRC_DIR,       BUILD_DIR,
+    ORDER_FILE,    LICENSE_FILE,      PACKAGE_FILE,
+    UNCOMPR_BUILD, UNCOMPR_BUILD_DIR, UNCOMPR_BUILD_MAP,
+    MINIF_BUILD,   MINIF_BUILD_DIR,   MINIF_BUILD_MAP
+} = require('./shared/constants');
 
 const fetchSources = () => AsyncIteration(async (include) => {
 
-    const json = await readFile(orderFile, 'utf8');
+    const json = await readFile(ORDER_FILE, 'utf8');
     const order = JSON.parse(json);
     const ordered = new Set();
     const fetches = new Map();
@@ -29,14 +23,14 @@ const fetchSources = () => AsyncIteration(async (include) => {
     // Define function used to retrieve and read contents of all unordered
     // source files in a specific folder.
     const fetchDir = (dir) => AsyncIteration(async (include) => {
-        const content = await readdir(join(srcDir, dir));
+        const content = await readdir(join(SRC_DIR, dir));
         const fetches = [];
         for (const c of content) {
             const path = join(dir, c);
             if (!ordered.has(path)) {
                 if (/\./.test(c)) {
                     if (/\.js$/.test(c)) {
-                        reads.set(path, readFile(join(srcDir, path), 'utf8'));
+                        reads.set(path, readFile(join(SRC_DIR, path), 'utf8'));
                         include(path);
                     }
                 }
@@ -55,7 +49,7 @@ const fetchSources = () => AsyncIteration(async (include) => {
         const path = item.replace('/', sep);
         if (/\.js$/.test(path)) {
             ordered.add(path);
-            reads.set(path, readFile(join(srcDir, path), 'utf8'));
+            reads.set(path, readFile(join(SRC_DIR, path), 'utf8'));
         }
         else if (/(?:^|\/)\.\.\.$/.test(item)) {
             const dir = item.substr(0, item.length - 4);
@@ -65,7 +59,7 @@ const fetchSources = () => AsyncIteration(async (include) => {
                 new Promise(setTimeout).then(fetchDir.bind(null, dir))
             );
         }
-        else throw Error(`${item} doesn't end with .js or ... in ${orderFile}`);
+        else throw Error(`${item} doesn't end with .js or ... (${ORDER_FILE})`);
     });
 
     // Iterate through sources and output them
@@ -98,8 +92,8 @@ const buildUncompressed = async (sourcesFetch, license, dirCreation) => {
     }
     await dirCreation;
     await Promise.all([
-        writeFile(uncompressedBuild, concat.content),
-        writeFile(uncompressedBuildMap, concat.sourceMap)
+        writeFile(UNCOMPR_BUILD, concat.content),
+        writeFile(UNCOMPR_BUILD_MAP, concat.sourceMap)
     ]);
 };
 
@@ -118,18 +112,18 @@ const buildMinified = async (sourcesFetch, license, dirCreation) => {
     }
     await dirCreation;
     await Promise.all([
-        writeFile(minifiedBuild, concat.content),
-        writeFile(minifiedBuildMap, concat.sourceMap)
+        writeFile(MINIF_BUILD, concat.content),
+        writeFile(MINIF_BUILD_MAP, concat.sourceMap)
     ]);
 };
 
 const build = async () => {
     console.log('Building');
-    const dirRemoval = rmfr(buildDir);
-    const dirCreation = dirRemoval.then(mkdir.bind(null, buildDir));
+    const dirRemoval = rmfr(BUILD_DIR);
+    const dirCreation = dirRemoval.then(mkdir.bind(null, BUILD_DIR));
     const sourcesFetch = fetchSources();
-    const licenseRead = readFile(licenseFile, 'utf8');
-    const packageRead = readFile(packageFile, 'utf8');
+    const licenseRead = readFile(LICENSE_FILE, 'utf8');
+    const packageRead = readFile(PACKAGE_FILE, 'utf8');
     const { version } = JSON.parse(await packageRead);
     const header = `\nJOY2D ${version}\n\n`;
     const licenseBody = header + await licenseRead;
@@ -138,12 +132,12 @@ const build = async () => {
         buildUncompressed(
             sourcesFetch,
             license,
-            dirCreation.then(mkdir.bind(null, uncompressedBuildDir))
+            dirCreation.then(mkdir.bind(null, UNCOMPR_BUILD_DIR))
         ),
         buildMinified(
             sourcesFetch,
             license,
-            dirCreation.then(mkdir.bind(null, minifiedBuildDir))
+            dirCreation.then(mkdir.bind(null, MINIF_BUILD_DIR))
         )
     ]);
     console.log('Build completed');
