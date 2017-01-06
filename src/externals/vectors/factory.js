@@ -33,7 +33,7 @@ JOY.$(function* (ns) {
             return this[$y];
         },
 
-        scale(num) {
+        scaled(num) {
             return Vector(this[$x] * num, this[$y] * num);
         },
 
