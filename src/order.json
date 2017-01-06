@@ -1,5 +1,5 @@
 [
-    "initialize.js",
+    "main/initializer.js",
     "...",
-    "finalize.js"
+    "main/finalizer.js"
 ]
