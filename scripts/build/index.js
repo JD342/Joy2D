@@ -10,7 +10,7 @@ const {
     ORDER_FILE,    LICENSE_FILE,      PACKAGE_FILE,
     UNCOMPR_BUILD, UNCOMPR_BUILD_DIR, UNCOMPR_BUILD_MAP,
     MINIF_BUILD,   MINIF_BUILD_DIR,   MINIF_BUILD_MAP
-} = require('./shared/constants');
+} = require('../shared/constants');
 
 const fetchSources = () => AsyncIteration(async (include) => {
 
