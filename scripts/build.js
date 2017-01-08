@@ -141,6 +141,7 @@ const build = async () => {
         )
     ]);
     console.log('Build completed');
+    return 0;
 };
 
 module.exports = build;
