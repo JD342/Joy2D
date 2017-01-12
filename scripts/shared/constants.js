@@ -2,7 +2,7 @@
 const { resolve, join } = require('path');
 
 exports.MAIN_DIR          = resolve(__dirname, '..', '..');
-exports.SRC_DIR           = join(exports.MAIN_DIR, 'src');
+exports.SRC_DIR           = join(exports.MAIN_DIR, 'source');
 exports.BUILD_DIR         = join(exports.MAIN_DIR,'build');
 exports.LICENSE_FILE      = join(exports.MAIN_DIR, 'LICENSE');
 exports.PACKAGE_FILE      = join(exports.MAIN_DIR, 'package.json');
