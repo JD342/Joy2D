@@ -32,7 +32,7 @@ JOY.$(function* (ns) {
         $root,       $rootChange,
         $visible,    $visibilityChange,
         $entities,   $entChange,        $entInsertion,  $entRemoval,
-        $components, $compChange,       $compInsertion, $compRemoval,
+        $components, $compChange,       $compInsertion, $compRemoval
     } = symbols;
 
     Object.defineProperties(prototype, getDescriptors({
