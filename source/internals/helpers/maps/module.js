@@ -1,5 +1,5 @@
-JOY.core.helpers.maps = {
+JOY.runModule(function* (ns) {
 
 
 
-};
+});

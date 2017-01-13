@@ -1,16 +1,19 @@
-JOY.Core.Helpers.Objects = {
+JOY.runModule(function* (ns) {
 
-    getDescriptors(obj) {
+    const { declare } = yield ns;
+    declare(ns.helpers.objects, { getDescriptors, getMap });
+
+    function getDescriptors (obj) {
         const descriptors = {};
         for (const key of Reflect.ownKeys(obj)) {
             const descriptor = Object.getOwnPropertyDescriptor(obj, key);
             descriptors[key] = descriptor;
         }
         return descriptors;
-    },
+    }
 
-    getMap(obj) {
+    function getMap(obj) {
 
     }
 
-};
+});

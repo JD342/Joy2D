@@ -1,7 +1,9 @@
-JOY.core.helpers.arrays = (() => {
+JOY.runModule(function* (ns) {
+
+    const { declare } = yield ns;
 
     const emptyFrozenArr = Object.freeze([]);
 
-    return { emptyFrozenArr };
+    declare(ns.helpers.arrays, { emptyFrozenArr });
 
 });
