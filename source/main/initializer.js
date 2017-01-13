@@ -1,6 +1,6 @@
 const JOY = {};
 
-JOY.$ = (() => {
+JOY.runModule = (() => {
 
     const liteners = new Map();
     const contents = new Map();

@@ -1,6 +1,6 @@
 // Logic for creating factories
 //
-JOY.$(function* (ns) {
+JOY.runModule(function* (ns) {
 
     const { declare } = yield ns;
 

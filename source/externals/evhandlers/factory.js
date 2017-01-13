@@ -1,4 +1,4 @@
-JOY.$(function* (ns) {
+JOY.runModule(function* (ns) {
 
     const { declare }              = yield ns;
     const { $init, createFactory } = yield ns.factories;

@@ -1,4 +1,4 @@
-JOY.$(function* (ns) {
+JOY.runModule(function* (ns) {
 
     /// Declare Event factory
 
