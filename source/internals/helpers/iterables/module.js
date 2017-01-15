@@ -1,7 +1,8 @@
-JOY.runModule(function* (ns) {
+JOY.runModule(function* ({ Internals, Namespaces }) {
 
-    const { declare } = yield ns;
-    declare(ns.helpers.iterables, { zip, first });
+    const { declare } = yield Namespaces;
+
+    declare(Internals.Helpers.Iterables, { zip, first });
 
     function* zip(...iterables) {
         const iterators = iterables.map(i => i[Symbol.iterator]());

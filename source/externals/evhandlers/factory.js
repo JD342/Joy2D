@@ -1,7 +1,7 @@
-JOY.runModule(function* (ns) {
+JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
-    const { declare }              = yield ns;
-    const { $init, createFactory } = yield ns.factories;
+    const { declare }              = yield Namespaces;
+    const { $init, createFactory } = yield Externals.Factories;
 
     /// Declare EventHandler factory
 
@@ -15,13 +15,13 @@ JOY.runModule(function* (ns) {
         defineGetters
     });
 
-    declare(ns.evHandlers, { EventHandler });
+    declare(Externals.EvHandlers, { EventHandler });
 
     /// Implement factory functions and populate prototype
 
-    const { getDescriptors } = yield ns.helpers.objects;
-    const { zip } = yield ns.helpers.iterables;
-    const { Event, $fire, $isObserved } = yield ns.events;
+    const { getDescriptors }            = yield Internals.Helpers.Objects;
+    const { zip }                       = yield Internals.Helpers.Iterables;
+    const { Event, $fire, $isObserved } = yield Internals.Events;
 
     const { $event } = symbols;
 

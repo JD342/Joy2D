@@ -1,7 +1,7 @@
-JOY.runModule(function* (ns) {
+JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
-    const { declare }              = yield ns;
-    const { $init, createFactory } = yield ns.factories;
+    const { declare }              = yield Namespaces;
+    const { $init, createFactory } = yield Externals.Factories;
 
     /// Declare Entity factory
 
@@ -15,15 +15,15 @@ JOY.runModule(function* (ns) {
 
     Object.assign(Entity, { E_INS, E_REM, C_INS, C_REM });
 
-    declare(ns.entities, { Entity, $broundingRadius });
+    declare(Externals.Entities, { Entity, $broundingRadius });
 
     /// Populate prototype
 
-    const { getDescriptors } = yield ns.helpers.objects;
-    const { emptyFrozenArr } = yield ns.helpers.arrays;
-    const { EventHandler }   = yield ns.evHandlers;
-    const { Component }      = yield ns.components;
-    const { MultiMap }       = yield ns.multiMaps;
+    const { getDescriptors } = yield Internals.Helpers.Objects;
+    const { emptyFrozenArr } = yield Internals.Helpers.Arrays;
+    const { EventHandler }   = yield Externals.EvHandlers;
+    const { Component }      = yield Externals.Components;
+    const { MultiMap }       = yield Internals.MultiMaps;
 
     const {
         $name,       $nameChange,

@@ -1,9 +1,9 @@
-JOY.runModule(function* (ns) {
+JOY.runModule(function* ({ Internals, Namespaces }) {
 
-    const { declare } = yield ns;
+    const { declare } = yield Namespaces;
 
     const emptyFrozenArr = Object.freeze([]);
 
-    declare(ns.helpers.arrays, { emptyFrozenArr });
+    declare(Internals.Helpers.Objects, { emptyFrozenArr });
 
 });

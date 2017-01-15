@@ -1,4 +1,4 @@
-JOY.runModule(function* (ns) {
+JOY.runModule(function* () {
 
 
 

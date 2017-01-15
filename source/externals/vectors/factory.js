@@ -1,20 +1,24 @@
-JOY.runModule(function* (ns) {
+JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
-    const { declare }              = yield ns;
-    const { $init, createFactory } = yield ns.factories;
+    const { declare }              = yield Namespaces;
+    const { $init, createFactory } = yield Externals.Factories;
 
     /// Declare Vector factory
 
     const [ Vector, { prototype, symbols } ] = createFactory();
     const { $vecRelativeTo } = symbols;
 
-    declare(ns.vectors, { Vector, $vecRelativeTo });
+    declare(Externals.Vectors, { Vector, $vecRelativeTo });
 
     /// Populate prototype and define factory constants
 
-    const { getDescriptors }                    = yield ns.helpers.objects;
-    const { Transformation, $vector, $complex } = yield ns.transformations;
-    const { $im, $re }                          = yield ns.complexNums;
+    const { getDescriptors }                    = yield Internals.Helpers.Objects;
+    const { $im, $re }                          = yield Externals.ComplexNums;
+    const {
+        Transformation,
+        $vector,
+        $complex
+    } = yield Externals.Transformations;
 
     const { $x, $y } = symbols;
 

@@ -1,14 +1,14 @@
-JOY.runModule(function* (ns) {
+JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
     /// Declare Event factory
 
-    const { declare }              = yield ns;
-    const { $init, createFactory } = yield ns.factories;
+    const { declare }              = yield Namespaces;
+    const { $init, createFactory } = yield Externals.Factories;
 
     const [ Event, { prototype, symbols } ] = createFactory();
     const { $fire, $isObserved } = symbols;
 
-    declare(ns.events, { Event, $fire, $isObserved });
+    declare(Internals.Events, { Event, $fire, $isObserved });
 
     /// Populate prototype
 

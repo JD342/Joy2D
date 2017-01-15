@@ -45,13 +45,14 @@ JOY.runModule = (() => {
 
     };
 
-    const root = createNamespace();
+    const Root = createNamespace();
 
-    declare(root, { declare });
+    declare(Root, {});
+    declare(Root.Namespaces, { declare });
 
     return (generator) => {
 
-        const iterator = generator(root);
+        const iterator = generator(Root);
 
         (function f(content) {
 

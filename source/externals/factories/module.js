@@ -1,8 +1,8 @@
 // Logic for creating factories
 //
-JOY.runModule(function* (ns) {
+JOY.runModule(function* ({ Externals, Namespaces }) {
 
-    const { declare } = yield ns;
+    const { declare } = yield Namespaces;
 
     const prototypes = new WeakMap();
     const internalSymbols = new WeakSet();
@@ -106,7 +106,7 @@ JOY.runModule(function* (ns) {
 
     };
 
-    declare(ns.factories, { $init, createFactory });
+    declare(Externals.Factories, { $init, createFactory });
 
     JOY.factories = Object.freeze({ $init, createFactory });
 
