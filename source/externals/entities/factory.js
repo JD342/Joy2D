@@ -1,9 +1,9 @@
 JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
+    /// Declare Entity factory
+
     const { declare }              = yield Namespaces;
     const { $init, createFactory } = yield Externals.Factories;
-
-    /// Declare Entity factory
 
     const [ Entity, { prototype, symbols } ] = createFactory();
 
@@ -14,8 +14,8 @@ JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
     const C_REM = Symbol('Component Removal');
 
     Object.assign(Entity, { E_INS, E_REM, C_INS, C_REM });
-
     declare(Externals.Entities, { Entity, $broundingRadius });
+    JOY.Entity = Entity;
 
     /// Populate prototype
 
@@ -433,6 +433,5 @@ JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
     Object.freeze(prototype);
     Object.freeze(Entity);
-    JOY.Entity = Entity;
 
 });

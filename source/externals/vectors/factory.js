@@ -1,14 +1,15 @@
 JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
+    /// Declare Vector factory
+
     const { declare }              = yield Namespaces;
     const { $init, createFactory } = yield Externals.Factories;
-
-    /// Declare Vector factory
 
     const [ Vector, { prototype, symbols } ] = createFactory();
     const { $vecRelativeTo } = symbols;
 
     declare(Externals.Vectors, { Vector, $vecRelativeTo });
+    JOY.Vector = Vector;
 
     /// Populate prototype and define factory constants
 
@@ -75,6 +76,5 @@ JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
     Object.freeze(prototype);
     Object.freeze(Vector);
-    JOY.Vector = Vector;
 
 });

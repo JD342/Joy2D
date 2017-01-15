@@ -2,7 +2,7 @@
 //
 JOY.runModule(function* ({ Externals, Namespaces }) {
 
-    const { declare } = yield Namespaces;
+    /// Initialize module
 
     const prototypes = new WeakMap();
     const internalSymbols = new WeakSet();
@@ -85,9 +85,18 @@ JOY.runModule(function* ({ Externals, Namespaces }) {
 
     });
 
+    /// Declare Factories module
+
+    const { declare } = yield Namespaces;
+
     const $init = createInternalSymbol('$init');
 
-    const createFactory = ({ extends: superFactory }) => {
+    declare(Externals.Factories, { $init, createFactory });
+    JOY.Factories = Object.freeze({ $init, createFactory });
+
+    /// Implement module functions
+
+    function createFactory ({ extends: superFactory }) {
 
         const symbols = createInternalSymbols();
 
@@ -104,10 +113,6 @@ JOY.runModule(function* ({ Externals, Namespaces }) {
 
         return [ factory, { prototype, symbols } ];
 
-    };
-
-    declare(Externals.Factories, { $init, createFactory });
-
-    JOY.factories = Object.freeze({ $init, createFactory });
+    }
 
 });
