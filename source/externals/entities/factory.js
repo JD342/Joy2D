@@ -23,7 +23,7 @@ JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
     const { emptyFrozenArr } = yield Internals.Helpers.Arrays;
     const { EventHandler }   = yield Externals.EvHandlers;
     const { Component }      = yield Externals.Components;
-    const { MultiMap }       = yield Internals.MultiMaps;
+    const { MultiMap }       = yield Internals.Multimaps;
 
     const {
         $name,       $nameChange,
