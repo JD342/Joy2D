@@ -1,13 +1,13 @@
 JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
-    /// Declare MultiMap factory
+    /// Declare Multimap factory
 
     const { declare }              = yield Namespaces;
     const { $init, createFactory } = yield Externals.Factories;
 
-    const [ MultiMap, { prototype, symbols } ] = createFactory();
+    const [ Multimap, { prototype, symbols } ] = createFactory();
 
-    declare(Internals.Multimaps, { MultiMap });
+    declare(Internals.Multimaps, { Multimap });
 
     /// Populate prototype
 
