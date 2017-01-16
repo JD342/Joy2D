@@ -1,0 +1,4 @@
+{
+    "min": { "requires": ["build/minified/joy2d.min.js"] },
+    "unc": { "requires": ["build/uncompressed/joy2d.js"] }
+}

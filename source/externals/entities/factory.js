@@ -1,3 +1,119 @@
+var x = 2;
+
+import { props } from './internals/helpers/objects.js';
+import { emptyFrozenArr } from './internals/helpers/arrays.js';
+import { createFactory } from './internals/helpers/arrays.js';
+import { Multimap } from './externals/evHandlers.js';
+import { Component } from './externals/components.js';
+import { Factory, Prototype, $extend, $init, internalSymbols } from './externals/factories.js';
+
+const [ $name,          $nameChange,
+        $parent,        $parentChange,
+        $parents,       $parentsChange,
+        $root,          $rootChange,
+        $visible,       $visibilityChange,
+        $entities,      $entChange,
+        $components,    $compChange,
+        $entInsertion,  $entRemoval,
+        $compInsertion, $compRemoval ] = internalSymbols;
+
+
+import { defineProps, create } from './internals/helpers/objects.js';
+import { emptyFrozenArr } from './internals/helpers/arrays.js';
+import { createFactory } from './internals/helpers/arrays.js';
+import { Component } from './externals/components.js'
+import { Multimap } from './externals/evHandlers.js';
+import { Root, $init, $super } from './externals/factories.js'
+
+export const Entity = Root.extend({
+
+    [$init]() {
+        this[$super][$init]
+    }
+
+});
+
+
+/*
+export class Entity extends Component {
+
+
+
+};
+*/
+
+export const Entity2 = Factory(Component, {
+
+
+
+});
+
+export const Entity = Component($extend, {
+
+});
+
+
+
+
+
+/*
+JOY.runModule(async ({ Internals, Externals, Namespaces }) => {
+
+    const { defineProps }    = await JOY.Internals;
+    const { emptyFrozenArr } = await JOY.Internals.Helpers.Arrays;
+
+
+});
+
+JOY.runModule(async () => {
+
+    const { defineProps }          = await JOY.internals.helpers.objects;
+    const { emptyFrozenArr }       = await JOY.internals.helpers.arrays;
+    const { Multimap }             = await JOY.internals.multimaps;
+    const { EventHandler }         = await JOY.externals.evHandlers;
+    const { Component }            = JOY.externals.components;
+    const { createFactory, $init } = JOY.externals.factories;
+
+});
+
+
+{
+
+    const { defineProps }          = JOY.internals.helpers.objects;
+    const { emptyFrozenArr }       = JOY.internals.helpers.arrays;
+    const { Multimap }             = JOY.internals.multimaps;
+    const { EventHandler }         = JOY.externals.evHandlers;
+    const { Component }            = JOY.externals.components;
+    const { createFactory, $init } = JOY.externals.factories;
+
+    const [ Entity, { prototype, symbols } ] = createFactory();
+    JOY.Entity = Entity;
+
+    const {
+        $name,       $nameChange,
+        $parent,     $parentChange,
+        $parents,    $parentsChange,
+        $root,       $rootChange,
+        $visible,    $visibilityChange,
+        $entities,   $entChange,        $entInsertion,  $entRemoval,
+        $components, $compChange,       $compInsertion, $compRemoval
+    } = symbols;
+
+}
+
+
+JOY.namespace(function* ({ Internals, Externals, Namespaces }) {
+
+    const { defineProps }    = yield Internals.Helpers.Objects;
+    const { emptyFrozenArr } = yield Internals.Helpers.Arrays;
+    const { Multimap }       = yield Internals.Multimaps;
+    const { EventHandler }   = yield Externals.EvHandlers;
+    const { Component }      = yield Externals.Components;
+    const { Factory }        = yield Externals.Factories;
+
+
+
+});
 JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
 
     /// Declare Entity factory
@@ -435,3 +551,4 @@ JOY.runModule(function* ({ Internals, Externals, Namespaces }) {
     Object.freeze(Entity);
 
 });
+*/

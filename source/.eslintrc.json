@@ -1,4 +1,5 @@
 {
     "env": { "browser": true },
-    "globals": { "JOY": false }
+    "globals": { "JOY": false },
+    "parserOptions": { "sourceType": "module" }
 }
