@@ -1,172 +1,144 @@
+/*
+
+    Joy2D 003
+    Copyright (c) 2014-2018 Nicola Fiori
+
+    All rights reserved.
+
+*/
+
+'use strict';
+
 // requires:
 // - Deviser.js 001
 
-var joy = (function (dev) {
-/* jshint esnext: true */
-"use strict";
+const joy = {};
 
-var joy = {},
+(() => {
+
+const
     utils = joy.utils = {},
     devUtils = dev.utils,
-    createFactory = dev.createFactory,
+    createFactory = dev.createFactory;
 
 /* -- core utils ------------------------------------------------------------ */
 
+const
     // createObj        core utils
     // from Deviser.js  utils
     //
     createObj = devUtils.createObj,
-
-    // defineProp       core utils
-    // from Deviser.js  utils
-    //
-    defineProp = devUtils.defineProp,
-
-    // defineProps      core utils
-    // from Deviser.js  utils
-    //
-    defineProps = devUtils.defineProps,
 
     // props            core utils
     // from Deviser.js  utils
     //
     props = devUtils.props,
 
-    // dynamicValue     core utils
-    // from Deviser.js  utils
-    //
-    dynamicValue = devUtils.dynamicValue,
-
     // math core utils
-    //      
+    //
     math = Math,
 
-    // sqrt     core utils 
-    //          
+    // sqrt     core utils
+    //
     // using:
     // - math   core utils
     //
     sqrt = math.sqrt,
 
-    // sin      core utils 
-    //          
+    // sin      core utils
+    //
     // using:
     // - math   core utils
     //
     sin = math.sin,
 
-    // cos      core utils 
-    //          
+    // cos      core utils
+    //
     // using:
     // - math   core utils
     //
     cos = math.cos,
 
-    // pi       core utils 
-    //          
+    // pi       core utils
+    //
     // using:
     // - math   core utils
     //
     pi = math.PI,
 
-    // atan2    core utils 
-    //          
+    // atan2    core utils
+    //
     // using:
     // - math   core utils
     //
     atan2 = math.atan2,
 
     // Str   core utils
-    //          
+    //
     Str = String,
 
     // st   core utils
-    //      
+    //
     st = setTimeout,
-
-    // merge            core utils
-    // from Deviser.js  utils
-    //
-    merge = devUtils.merge,
-
-    // prop             core utils
-    // from Deviser.js  utils
-    //
-    prop = devUtils.prop,
-
-    // propsWithGet     core utils
-    // from Deviser.js  utils
-    //                  
-    propsWithGet = devUtils.propsWithGet,
 
     // dynamicMethod    core utils
     // from Deviser.js  utils
-    //                  
+    //
     dynamicMethod = devUtils.dynamicMethod,
-
-    // property         core utils
-    // from Deviser.js  utils
-    //                  
-    property = devUtils.property,
-
-    // getTime          core utils
-    // from Deviser.js  utils
-    //                  
-    getTime = devUtils.getTime,
 
     // keys             core utils
     // from Deviser.js  utils
-    //                  
+    //
     keys = devUtils.keys,
 
     // createEl         core utils
     // from Deviser.js  utils
-    //                  
-    createEl = devUtils.createEl,
+    //
+    // createEl = devUtils.createEl,
 
     // weakmap  core utils
-    //          
-    weakmap = function (iterable) { return new WeakMap(iterable); },
+    //
+    weakmap = (iterable) => new WeakMap(iterable),
 
     // set  core utils
-    //      
-    set = function (iterable) { return new Set(iterable); },
+    //
+    set = (iterable) => new Set(iterable),
 
     // boundingRadiusMap    core utils
-    //                  
+    //
     // using:
     // - weakmap            core utils
-    //              
+    //
     boundingRadiusMap = weakmap(),
 
     // transformationMap    core utils
-    //                      
+    //
     // using:
     // - weakmap            core utils
-    //              
+    //
     transformationMap = weakmap(),
 
     // zIndexMap    core utils
     //
     // using:
     // - weakmap    core utils
-    //              
+    //
     zIndexMap = weakmap(),
 
     // componentTargetsMap  core utils
-    //                      
+    //
     // using:
     // - weakmap            core utils
-    //              
+    //
     componentTargetsMap = weakmap(),
 
     // refreshBoundingRadiusOf  core utils
-    //                          
+    //
     // using:
     // - refresh                core utils
     // - boundingRadiusMap      core utils
     //
-    refreshBoundingRadiusOf = function (node) {
+    refreshBoundingRadiusOf = (node) => {
         var boundingRadius = boundingRadiusMap.get(node);
         if (boundingRadius.refreshed) {
             var parent = node.parent();
@@ -176,11 +148,11 @@ var joy = {},
     },
 
     // refreshAbsoluteTransformationOf  core utils
-    //                                  
+    //
     // using:
     // - transformationMap              core utils
     //
-    refreshAbsoluteTransformationOf = function (node) {
+    refreshAbsoluteTransformationOf = (node) => {
         var transformation = transformationMap.get(node);
         if (transformation.refreshed) {
             transformation.refreshed = false;
@@ -191,11 +163,11 @@ var joy = {},
     },
 
     // refreshAbsoluteZIndexOf  core utils
-    //                          
+    //
     // using:
     // - zIndexMap              core utils
     //
-    refreshAbsoluteZIndexOf = function (node) {
+    refreshAbsoluteZIndexOf = (node) => {
         var zIndex = zIndexMap.get(node);
         if (zIndex.refreshed) {
             zIndex.refreshed = false;
@@ -203,10 +175,11 @@ var joy = {},
                 ind = children.length;
             while (ind--) refreshAbsoluteZIndexOf(children[ind]);
         }
-    },
+    };
 
 /* -- core factories -------------------------------------------------------- */
 
+const
     // devRoot
     // from Deviser.js
     devRoot = dev.root,
@@ -216,22 +189,18 @@ var joy = {},
     //
     collection = dev.collection,
 
-    // animationFrameLoop   core factories
-    // from Deviser.js      factories
-    //
-    animationFrameLoop = dev.animationFrameLoop,
-
     // canvas2D         core factories
     // from Deviser.js  factories
-    //                  
+    //
     canvas2D = dev.canvas2D,
 
     // error        core factories
     //
-    // using:       
+    // using:
     // - createObj  core utils
-    //          
+    //
     error = createFactory(
+
         function Joy2DError(data) {
             var obj = data[0];
             this.message = (
@@ -244,21 +213,24 @@ var joy = {},
                         ' called "' + obj.name() + '"'
                         : ''
                 ) +
-                ': '+
+                ': ' +
                 data[2] +
                 '.'
             );
         },
+
         createObj(Error.prototype)
+
     ),
 
     // cannotBeSetError     core factories
     // inherits from error  core factories
-    //                      
+    //
     // using:
     // - createObj          core utils
     //
     cannotBeSetError = createFactory(
+
         function Joy2DCannotBeSetError(data) {
             error.constructor.call(
                 this,
@@ -269,48 +241,57 @@ var joy = {},
                 ]
             );
         },
+
         createObj(error.prototype)
+
     ),
 
     // boudingRadiusError               core factories
     // inherits from cannotBeSetError   core factories
-    //                      
+    //
     // using:
     // - createObj                      core utils
     //
     boudingRadiusError = createFactory(
+
         function Joy2DBoundingRadiusSetError(object) {
             cannotBeSetError.constructor.call(
                 this,
                 [object, 'boundingRadius', 'bounding radius of an object']
             );
         },
+
         createObj(cannotBeSetError.prototype)
+
     ),
 
     // insertError          core factories
     // inherits from error  core factories
-    //                      
+    //
     // using:
     // - createObj          core utils
     //
     insertError = createFactory(
+
         function Joy2DInsertError(data) {
             error.constructor.call(this, [data[0], 'insert', data[1]]);
         },
+
         createObj(error.prototype)
-    ),
+
+    );
 
 /* -- utils ----------------------------------------------------------------- */
 
+const
     // pyth     utils
     //
     // using:
     // - sqrt   core utils
-    //          
-    pyth = utils.pyth = function (a, b) { return sqrt(a * a + b * b); },
+    //
+    pyth = utils.pyth = (a, b) => sqrt(a * a + b * b),
 
-    tT = utils.tT = function (t, T) {
+    tT = utils.tT = (t, T) => {
         var t0 = t[0], t1 = t[1],
             t2 = t[2], t3 = t[3],
             T0 = T[0], T1 = T[1],
@@ -323,7 +304,7 @@ var joy = {},
         ];
     },
 
-    t = utils.t = function (tT, T) {
+    t = utils.t = (tT, T) => {
         var tT0 = tT[0], tT1 = tT[1],
             tT2 = tT[2], tT3 = tT[3],
             T0 = T[0], T1 = T[1],
@@ -340,56 +321,59 @@ var joy = {},
     },
 
     // setMaps  utils
-    //          
-    setMaps = utils.setMaps = function (key, arr) {
+    //
+    setMaps = utils.setMaps = (key, arr) => {
         var ind = 0;
         while (ind < arr.length) arr[ind++].set(key, arr[ind++]);
     },
 
     // sqr
     //
-    sqr = function (x) { return x * x; },
+    sqr = (x) => x * x,
 
     // pointPointDistanceSqr
     //
-    pointPointDistanceSqr = function (pointA, pointB) {
-        return sqr(pointA[0] - pointB[0]) + sqr(pointA[1] - pointB[1]);
-    },
+    pointPointDistanceSqr =
+        (pointA, pointB) =>
+            sqr(pointA[0] - pointB[0]) + sqr(pointA[1] - pointB[1]),
 
     // pointSegmentDistanceSqr
     //
-    pointSegmentDistanceSqr = utils.pointSegmentDistanceSqr = function (point, segment) {
-        var pointA = segment[0],
-            pointB = segment[1],
-            l2 = pointPointDistanceSqr(pointA, pointB);
-        if (l2 === 0) return pointPointDistanceSqr(point, pointA);
-        var xA = pointA[0],
-            yA = pointA[1],
-            xBxAdiff = pointB[0] - xA,
-            yByAdiff = pointB[1] - yA,
-            t = ((point[0] - xA) * xBxAdiff + (point[1] - yA) * yByAdiff) / l2;
-        return pointPointDistanceSqr(
-            point,
-            t < 0 ? pointA :
-            t > 1 ? pointB :
-            [
-                xA + t * xBxAdiff,
-                yA + t * yByAdiff
-            ]
-        );
-    },
+    pointSegmentDistanceSqr = utils.pointSegmentDistanceSqr =
+        (point, segment) => {
+            var pointA = segment[0],
+                pointB = segment[1],
+                l2 = pointPointDistanceSqr(pointA, pointB);
+            if (l2 === 0) return pointPointDistanceSqr(point, pointA);
+            var xA = pointA[0],
+                yA = pointA[1],
+                xBxAdiff = pointB[0] - xA,
+                yByAdiff = pointB[1] - yA,
+                t = ((point[0] - xA) * xBxAdiff + (point[1] - yA) * yByAdiff) /
+                    l2;
+            return pointPointDistanceSqr(
+                point,
+                t < 0 ?
+                    pointA :
+                    t > 1 ?
+                        pointB :
+                        [
+                            xA + t * xBxAdiff,
+                            yA + t * yByAdiff
+                        ]
+            );
+        },
 
     // pointSegmentDistance
     //
-    pointSegmentDistance = utils.pointSegmentDistance = function (point, segment) {
-        return sqrt(pointSegmentDistanceSqr(point, segment));
-    },
+    pointSegmentDistance = utils.pointSegmentDistance =
+        (point, segment) => sqrt(pointSegmentDistanceSqr(point, segment)),
 
     // segmentInCircle
     //
-    segmentInCircle = utils.segmentInCircle = function (segment, circle) {
-        return circle[1] > pointSegmentDistance(circle[0], segment);
-    },
+    segmentInCircle = utils.segmentInCircle =
+        (segment, circle) =>
+            circle[1] > pointSegmentDistance(circle[0], segment),
 
     /*
 
@@ -420,11 +404,11 @@ var joy = {},
             )
         );
     },*/
-    
+
 
     // pointInRect
     //
-    pointInRect = utils.pointInRect = function (point, rect) {
+    pointInRect = utils.pointInRect = (point, rect) => {
         var xP = point[0], yP = point[1],
             A = rect[0],
             w = rect[1],
@@ -438,10 +422,8 @@ var joy = {},
 
     // circleInRect
     //
-    circleInRect = utils.circleInRect = function (circle, rect) {
-        if (pointInRect(circle[0], rect)) {
-            return true;
-        }
+    circleInRect = utils.circleInRect = (circle, rect) => {
+        if (pointInRect(circle[0], rect)) return true;
         var A = rect[0],
             B = [A[0] + rect[1], A[1] + rect[2]],
             C = [B[0], A[1]],
@@ -457,29 +439,32 @@ var joy = {},
 
     // rotation
     //
-    rotation = utils.rotation = function (transformation) {
+    // eslint-disable-next-line no-unused-vars
+    rotation = utils.rotation = (transformation) => {
         return [transformation[1], transformation[2]];
     },
 
     // theta
     //
-    theta = utils.thetaOf = function (rotation) {
-        return atan2(rotation[1], rotation[0]);
-    },
+    // eslint-disable-next-line no-unused-vars
+    theta = utils.thetaOf = (rotation) => atan2(rotation[1], rotation[0]),
 
     // deg
     //
-    deg = utils.deg = function (rad) { return rad * 180 / pi; },
+    // eslint-disable-next-line no-unused-vars
+    deg = utils.deg = (rad) => rad * 180 / pi,
 
     // rad
-    rad = utils.rad = function (deg) { return deg * pi / 180; },
-
+    //
+    // eslint-disable-next-line no-unused-vars
+    rad = utils.rad = (deg) => deg * pi / 180;
 
 /* -- factories ------------------------------------------------------------- */
 
+const
     // object                   factories
     // inherits from collection core factories
-    //          
+    //
     // using:
     // - parentChildError       core factories
     // - notAChildError         core factories
@@ -491,15 +476,11 @@ var joy = {},
     // - tToTAbsolute           utils
     //
     object = joy.object = (function () {
-        function defaultUpdate(deltaTime) {
-            var children = this.children(),
-                ind = children.length;
-            while (ind--) children[ind].update(deltaTime);
-        }
+
         function getItems(collection, factory) {
             var arr = [],
                 ind = 0,
-                max  = collection.length,
+                max = collection.length,
                 currItem;
             while (ind < max) {
                 currItem = collection[ind++];
@@ -508,13 +489,16 @@ var joy = {},
             }
             return arr;
         }
+
         var parentMap = weakmap(),
             rootParentMap = weakmap(),
             nameMap = weakmap(),
             visibleMap = weakmap(),
             zIndexMap = weakmap(),
             collisionRadiusMap = weakmap();
+
         return createFactory(
+
             function Joy2DObject(name) {
                 collection.call(this);
                 setMaps(this, [
@@ -538,12 +522,15 @@ var joy = {},
                     }
                 ]);
             },
+
             createObj(collection.prototype, props({
-                parent: function (newParent) {
+
+                parent(newParent) {
                     if (newParent) newParent.append(this);
                     return parentMap.get(this);
                 },
-                rootParent: function (newRootParent) {
+
+                rootParent(newRootParent) {
                     if (newRootParent) throw cannotBeSetError([
                         this,
                         'rootParent',
@@ -551,7 +538,8 @@ var joy = {},
                     ]);
                     return rootParentMap.get(this);
                 },
-                boundingRadius: function (newBoundingRadius) {
+
+                boundingRadius(newBoundingRadius) {
                     if (newBoundingRadius) throw boudingRadiusError(this);
                     var boundingRadius = boundingRadiusMap.get(this);
                     if (boundingRadius.refreshed)
@@ -561,7 +549,7 @@ var joy = {},
                         radius,
                         tr,
                         ind = this.length;
-                    while (ind--) {
+                    while (ind--)
                         // TODO fix bug
                         // var obj1 = joy.object(),
                         //     obj2 = joy.object().appendTo(obj1);
@@ -573,14 +561,15 @@ var joy = {},
                                     pyth(tr[0], tr[1]) +
                                     currNode.boundingRadius()
                                 );
-                            } else radius = currNode.boundingRadius();
+                            }
+                            else radius = currNode.boundingRadius();
                             if (radius > maxRadius) maxRadius = radius;
                         }
-                    }
                     boundingRadius.refreshed = true;
                     return boundingRadius.value = maxRadius;
                 },
-                collisionRadius: function (newCollisionRadius) {
+
+                collisionRadius(newCollisionRadius) {
                     if (newCollisionRadius !== undefined) {
                         collisionRadiusMap.set(this, newCollisionRadius);
                         return this;
@@ -589,14 +578,16 @@ var joy = {},
                         return collisionRadiusMap.get(this);
                     return this.boundingRadius();
                 },
-                name: function (newName) {
+
+                name(newName) {
                     if (newName !== undefined) {
                         nameMap.set(this, Str(newName));
                         return this;
                     }
                     return nameMap.get(this);
                 },
-                visible: function (newVisibile) {
+
+                visible(newVisibile) {
                     var visible = visibleMap.get(this);
                     if (newVisibile !== undefined) {
                         var value = !!newVisibile;
@@ -609,7 +600,8 @@ var joy = {},
                     }
                     return visible && this.boundingRadius() !== 0;
                 },
-                zIndex: function (newZIndex) {
+
+                zIndex(newZIndex) {
                     if (typeof newZIndex === 'number') {
                         zIndexMap.get(this).value = newZIndex;
                         refreshAbsoluteZIndexOf(this);
@@ -617,16 +609,16 @@ var joy = {},
                     }
                     return zIndexMap.get(this).relative;
                 },
-                absoluteZIndex: function (newAbsoluteZIndex) {
+
+                absoluteZIndex(newAbsoluteZIndex) {
                     var parent;
                     if (newAbsoluteZIndex !== undefined) {
                         parent = this.parent();
-                        if (parent) return this.zIndex(
-                            parent ? 
+                        return this.zIndex(
+                            parent ?
                                 newAbsoluteZIndex - parent.absoluteZIndex()
                                 : newAbsoluteZIndex
                         );
-                        return this.zIndex(value);
                     }
                     var zIndex = zIndexMap.get(this);
                     if (zIndex.refreshed) return zIndex.absolute;
@@ -638,7 +630,8 @@ var joy = {},
                             : zIndex.relative
                     );
                 },
-                transformation: function (newTransformation) {
+
+                transformation(newTransformation) {
                     var transformation = transformationMap.get(this),
                         rel = transformation.relative;
                     if (newTransformation !== undefined) {
@@ -658,7 +651,8 @@ var joy = {},
                     }
                     return [rel[0], rel[1], rel[2], rel[3]];
                 },
-                absoluteTransformation: function (newAbsoluteTransformation) {
+
+                absoluteTransformation(newAbsoluteTransformation) {
                     var parent = this.parent();
                     if (parent) {
                         if (newAbsoluteTransformation !== undefined)
@@ -680,7 +674,8 @@ var joy = {},
                     }
                     return this.transformation(newAbsoluteTransformation);
                 },
-                position: function (newPosition) {
+
+                position(newPosition) {
                     var rel = this.transformation();
                     if (newPosition !== undefined) return this.transformation([
                         newPosition[0], newPosition[1],
@@ -688,7 +683,8 @@ var joy = {},
                     ]);
                     return [rel[0], rel[1]];
                 },
-                xPosition: function (newXPosition) {
+
+                xPosition(newXPosition) {
                     if (newXPosition !== undefined)
                         return this.position([
                             newXPosition,
@@ -696,7 +692,8 @@ var joy = {},
                         ]);
                     return this.position()[0];
                 },
-                yPosition: function (newYPosition) {
+
+                yPosition(newYPosition) {
                     if (newYPosition !== undefined)
                         return this.position([
                             this.xPosition(),
@@ -704,16 +701,18 @@ var joy = {},
                         ]);
                     return this.position()[1];
                 },
-                absolutePosition: function (newAbsolutePosition) {
+
+                absolutePosition(newAbsolutePosition) {
                     var abs = this.absoluteTransformation();
-                    if (newAbsolutePosition !== undefined) 
+                    if (newAbsolutePosition !== undefined)
                         return this.absoluteTransformation([
                             newAbsolutePosition[0], newAbsolutePosition[1],
                             abs[2], abs[3]
                         ]);
                     return [abs[0], abs[1]];
                 },
-                xAbsolutePosition: function (newXAbsolutePosition) {
+
+                xAbsolutePosition(newXAbsolutePosition) {
                     if (newXAbsolutePosition !== undefined)
                         return this.absolutePosition([
                             newXAbsolutePosition,
@@ -721,7 +720,8 @@ var joy = {},
                         ]);
                     return this.absolutePosition()[0];
                 },
-                yAbsolutePosition: function (newYAbsolutePosition) {
+
+                yAbsolutePosition(newYAbsolutePosition) {
                     if (newYAbsolutePosition !== undefined)
                         return this.absolutePosition([
                             this.xAbsolutePosition(),
@@ -729,7 +729,8 @@ var joy = {},
                         ]);
                     return this.absolutePosition()[1];
                 },
-                rotation: function (newRotation) {
+
+                rotation(newRotation) {
                     var rel = this.transformation();
                     if (newRotation !== undefined) return this.transformation([
                         rel[0], rel[1],
@@ -737,7 +738,8 @@ var joy = {},
                     ]);
                     return [rel[2], rel[3]];
                 },
-                absoluteRotation: function (newAbsoluteRotation) {
+
+                absoluteRotation(newAbsoluteRotation) {
                     var abs = this.absoluteTransformation();
                     if (newAbsoluteRotation !== undefined)
                         return this.absoluteTransformation([
@@ -746,24 +748,39 @@ var joy = {},
                         ]);
                     return [abs[2], abs[3]];
                 },
-                transform: function (transformation) {
+
+                transform(transformation) {
                     return this.transformation(tT(
                         transformation,
                         this.transformation()
                     ));
                 },
-                translate: function (position) {
+
+                translate(position) {
                     return this.transform([position[0], position[1], 1, 0]);
                 },
-                forward: function (x) {  return this.translate([x, 0]); 
+
+                forward(x) {
+                    return this.translate([x, 0]);
                 },
-                backward: function (x) { return this.translate([-x, 0]); },
-                leftward: function (x) { return this.translate([0, x]); },
-                rightward: function (x) { return this.translate([0, -x]); },
-                rotate: function (theta) {
+
+                backward(x) {
+                    return this.translate([-x, 0]);
+                },
+
+                leftward(x) {
+                    return this.translate([0, x]);
+                },
+
+                rightward(x) {
+                    return this.translate([0, -x]);
+                },
+
+                rotate(theta) {
                     return this.transform([0, 0, cos(theta), sin(theta)]);
                 },
-                aim: function (position) {
+
+                aim(position) {
                     var transformation = this.absoluteTransformation(),
                         t0 = transformation[0],
                         t1 = transformation[1],
@@ -775,23 +792,27 @@ var joy = {},
                         x / length, y / length
                     ]);
                 },
-                insert: function (item, index) {
+
+                insert(item, index) {
                     if (item instanceof object.constructor) {
                         // insert node
                         var currNode = this,
                             parent;
-                        while (parent = parentMap.get(currNode))
-                            if ((currNode = parent) === item) 
+                        while (true) {
+                            parent = parentMap.get(currNode);
+                            if (!parent) break;
+                            if ((currNode = parent) === item)
                                 throw insertError([
-                                    this, 
-                                    'a Joy2D object can\'t be both parent ' + 
+                                    this,
+                                    'a Joy2D object can\'t be both parent ' +
                                     'and child of another Joy2D object'
                                 ]);
+                        }
                         item.remove();
                         collection.prototype.insert.call(this, item, index);
                         parentMap.set(item, this);
                         rootParentMap.set(item, currNode);
-                        var components = item.components();
+                        // var components = item.components();
                         refreshAbsoluteTransformationOf(item);
                     }
                     else if (item instanceof component.constructor) {
@@ -807,7 +828,8 @@ var joy = {},
                     refreshBoundingRadiusOf(this);
                     return this;
                 },
-                remove: function (item) {
+
+                remove(item) {
                     if (item !== undefined) {
                         if (this.has(item)) {
                             if (item instanceof object.constructor) {
@@ -816,7 +838,7 @@ var joy = {},
                                 rootParentMap.set(item, null);
                                 var components = item.components(),
                                     ind = components.length;
-                                while (ind--) 
+                                while (ind--)
                                     componentTargetsMap.get(components[ind])
                                         .delete(item);
                                 refreshAbsoluteTransformationOf(item);
@@ -833,6 +855,7 @@ var joy = {},
                     }
                     return this;
                 },
+
                 destroy: dynamicMethod(function (time) {
                     if (time) {
                         st(this.destroy.bind(this), time);
@@ -846,44 +869,55 @@ var joy = {},
                         this.clear();
                     }
                 }),
-                children: function (newChildren) {
+
+                children(newChildren) {
                     var children = getItems(this, object);
                     if (newChildren) {
                         children.forEach(this.remove.bind(this));
-                        return this.add.apply(this, newChildren);
+                        return this.add(...newChildren);
                     }
                     return children;
                 },
-                components: function (newComponents) {
+
+                components(newComponents) {
                     var components = getItems(this, component);
                     if (newComponents) {
                         components.forEach(this.remove.bind(this));
-                        return this.add.apply(this, newComponents);
+                        return this.add(...newComponents);
                     }
                     return components;
                 },
-                forEachParent: function (callback) {
+
+                forEachParent(callback) {
                     var currNode = this;
-                    while (currNode = currNode.parent) callback(currNode);
+                    while (true) {
+                        currNode = currNode.parent;
+                        if (!currNode) break;
+                        callback(currNode);
+                    }
                     return this;
                 },
-                isInRect: function (rect) {
+
+                isInRect(rect) {
                     return circleInRect(
                         [this.absolutePosition(), this.boundingRadius],
                         rect
                     );
                 },
-                relativeTo: function (object) {
+
+                relativeTo(object) {
                     return t(
                         this.absoluteTransformation(),
                         object.absoluteTransformation()
                     );
                 },
-                appendTo: function (object) {
+
+                appendTo(object) {
                     object.append(this);
                     return this;
                 },
-                distanceTo: function (object) {
+
+                distanceTo(object) {
                     var currPosition = this.absolutePosition(),
                         objectPosition = object.absolutePosition();
                     return pyth(
@@ -891,43 +925,59 @@ var joy = {},
                         currPosition[1] - objectPosition[1]
                     );
                 },
-                collidesWith: function (object) {
+
+                collidesWith(object) {
                     return (
                         this.collisionRadius() + object.collisionRadius() >
                         this.distanceTo(object)
                     );
                 }
+
             }))
+
         );
+
     })(),
 
     // dynamicObject        factories
     // inherits from object factories
     //
     dynamicObject = joy.dynamicObject = createFactory(
-        function Joy2DDynamicObject() { object.constructor.call(this); },
+
+        function Joy2DDynamicObject() {
+            object.constructor.call(this);
+        },
+
         createObj(object.prototype, props({
+
             update: dynamicMethod(function (deltaTime) {
-                for (var child of this.children()) {
+                for (var child of this.children())
                     if (child instanceof dynamicObject.constructor)
                         child.update(deltaTime);
-                }
             })
+
         }))
+
     ),
 
     // camera                       factories
     // inherits from dynamicObject  factories
     //
+    // eslint-disable-next-line no-unused-vars
     camera = joy.camera = (function () {
+
         var viewMap = weakmap();
+
         return createFactory(
+
             function Joy2DCamera(name) {
                 dynamicObject.constructor.call(this, name);
                 viewMap.set(this, canvas2D());
             },
+
             createObj(dynamicObject.prototype, props({
-                view: function (newView) {
+
+                view(newView) {
                     if (newView) throw cannotBeSetError([
                         this,
                         'view',
@@ -935,50 +985,56 @@ var joy = {},
                     ]);
                     return viewMap.get(this);
                 },
-                pointInSpace: function (pointInView) {
+
+                pointInSpace(pointInView) {
                     var view = this.view(),
                         transformation = tT(
-                        [
-                            pointInView[0] - view.width() / 2,
-                            pointInView[1] - view.height() / 2,
-                            1,
-                            0
-                        ],
-                        this.absoluteTransformation()
-                    );
+                            [
+                                pointInView[0] - view.width() / 2,
+                                pointInView[1] - view.height() / 2,
+                                1,
+                                0
+                            ],
+                            this.absoluteTransformation()
+                        );
                     return [transformation[0], transformation[1]];
                 },
-                pointInView: function (pointInSpace) {
+
+                pointInView(pointInSpace) {
                     var view = this.view(),
                         transformation = t(
-                        [
-                            pointInSpace[0],
-                            pointInSpace[1],
-                            1,
-                            0
-                        ],
-                        this.absoluteTransformation()
-                    );
+                            [
+                                pointInSpace[0],
+                                pointInSpace[1],
+                                1,
+                                0
+                            ],
+                            this.absoluteTransformation()
+                        );
                     return [
                         transformation[0] + view.width() / 2,
                         transformation[1] + view.height() / 2
                     ];
                 },
-                width: function (val) {
+
+                width(val) {
                     if (val !== undefined) {
                         this.view().element().width = val;
                         return this;
                     }
                     return this.view().element().width;
                 },
-                height: function (val) {
+
+                height(val) {
                     if (val !== undefined) {
                         this.view().element().height = val;
                         return this;
                     }
                     return this.view().element().height;
                 },
-                drawView: function () {
+
+                drawView() {
+
                     // define rendering area rectangle
                     var viewWidth = this.width(),
                         viewHeight = this.height(),
@@ -987,7 +1043,7 @@ var joy = {},
                             viewWidth,
                             viewHeight
                         ],
-                    // get visible objects
+                        // get visible objects
                         objects = this.rootParent().children(),
                         visibleObjects = [],
                         ind = 0,
@@ -1007,6 +1063,7 @@ var joy = {},
                     }
                     // get levels
                     var levels = {};
+
                     visibleObjects.forEach(function loop(object) {
                         // get components
                         for (
@@ -1020,8 +1077,8 @@ var joy = {},
                             levelIndex = null;
                             handler = (
                                 component instanceof renderer.constructor ?
-                                1 :
-                                0
+                                    1 :
+                                    0
                             );
                             if (handler) (
                                 levels[
@@ -1033,6 +1090,7 @@ var joy = {},
                         }
                         object.children().forEach(loop);
                     });
+
                     // initialize canvas
                     var context = this.view().context();
                     context.clearRect(0, 0, viewWidth, viewHeight);
@@ -1043,7 +1101,8 @@ var joy = {},
                             levelIndices = keys(levels).sort(),
                             level, components, ind2, component, transformation,
                             sinTheta, cosTheta, targetAndComponent,
-                            componentTarget, componentCanvas, componentElement,
+                            // componentTarget,
+                            componentCanvas, componentElement,
                             componentContext, componentRadius;
                         ind1 < levelIndices.length;
                         ind1++
@@ -1096,32 +1155,48 @@ var joy = {},
                     }
                     context.restore();
                     return this;
+
                 }
+
             }))
+
         );
+
     })(),
 
     // component    factories
     // inherits from devRoot
-    //              
+    //
     component = joy.component = (function () {
-        function removeComponentFrom(target) { target.remove(this); }
-        function insertComponentIn(target) { target.insert(this); }
+
+        function removeComponentFrom(target) {
+            target.remove(this);
+        }
+
+        function insertComponentIn(target) {
+            target.insert(this);
+        }
+
         var visibleMap = weakmap(),
             refreshedMap = weakmap();
+
         return createFactory(
+
             function Joy2DComponent() {
                 devRoot.constructor.call(this);
                 componentTargetsMap.set(this, set());
-                boundingRadiusMap.set(this, 0); 
+                boundingRadiusMap.set(this, 0);
                 visibleMap.set(this, true);
             },
+
             createObj(devRoot.prototype, props({
-                boundingRadius: function (newBoundingRadius) {
+
+                boundingRadius(newBoundingRadius) {
                     if (newBoundingRadius) throw boudingRadiusError(this);
                     return boundingRadiusMap.get(this);
                 },
-                targets: function (newTargets) {
+
+                targets(newTargets) {
                     var targets = componentTargetsMap.get(this);
                     if (newTargets) {
                         targets.forEach(removeComponentFrom.bind(this));
@@ -1130,11 +1205,13 @@ var joy = {},
                     }
                     return targets;
                 },
-                appendTo: function (object) {
+
+                appendTo(object) {
                     object.append(this);
                     return this;
                 },
-                visible: function (newVisibile) {
+
+                visible(newVisibile) {
                     var visible = visibleMap.get(this);
                     if (newVisibile !== undefined) {
                         var value = !!newVisibile;
@@ -1147,39 +1224,47 @@ var joy = {},
                     }
                     return visible && this.boundingRadius() !== 0;
                 },
-                refreshed: function (newRefreshed) {
+
+                refreshed(newRefreshed) {
                     if (newRefreshed !== undefined) {
                         refreshedMap.set(this, newRefreshed);
                         return this;
                     }
                     return refreshedMap.get(this);
                 }
+
             }))
+
         );
+
     })(),
-
-
 
     // renderer                 factories
     // inherits from component  factories
     //
     renderer = joy.renderer = (function () {
+
         var backgroundMap = weakmap(),
             strokeMap = weakmap();
+
         return createFactory(
-            function Joy2DRenderer(drawer) {
+
+            function Joy2DRenderer(/* drawer */) {
                 component.constructor.call(this);
                 this.refreshed(false).canvas = canvas2D();
             },
+
             createObj(component.prototype, props({
-                draw: function () {
+
+                draw() {
                     throw error([
                         this,
                         'draw',
                         'this renderer has no draw method assigned to it'
                     ]);
                 },
-                radius: function (newRadius) {
+
+                radius(newRadius) {
                     var radius = this.boundingRadius();
                     if (newRadius !== undefined) {
                         if (newRadius !== radius) {
@@ -1190,35 +1275,45 @@ var joy = {},
                     }
                     return radius;
                 },
-                background: function (newBackground) {
+
+                background(newBackground) {
                     if (newBackground) {
                         backgroundMap.set(this, newBackground);
                         return this.refreshed(false);
                     }
                     return backgroundMap.get(this);
                 },
-                stroke: function (newStroke) {
+
+                stroke(newStroke) {
                     if (newStroke) {
                         strokeMap.set(this, newStroke);
                         return this.refreshed(false);
                     }
                     return strokeMap.get(this);
-                },
+                }
+
             }))
+
         );
+
     })(),
 
     // circle                   factories
     // inherits from renderer   factories
     //
+    // eslint-disable-next-line no-unused-vars
     circle = joy.circle = (function () {
+
         return createFactory(
+
             function Joy2DCircle(radius) {
                 renderer.constructor.call(this);
                 if (radius) this.radius(radius);
             },
+
             createObj(renderer.prototype, props({
-                draw: function (context) {
+
+                draw(context) {
                     if (this.visible()) {
                         var background = this.background(),
                             stroke = this.stroke(),
@@ -1239,22 +1334,30 @@ var joy = {},
                     }
                     return this.refreshed(true);
                 }
+
             }))
+
         );
+
     })(),
 
     // shape                    factories
     // inherits from renderer   factories
     //
     shape = joy.shape = (function () {
+
         var pathMap = weakmap();
+
         return createFactory(
+
             function Joy2DShape(path) {
                 renderer.constructor.call(this);
                 if (path) this.path(path);
             },
+
             createObj(renderer.prototype, props({
-                path: function (newPath) {
+
+                path(newPath) {
                     if (newPath) {
                         var maxRadius = 0,
                             ind1 = newPath.length,
@@ -1273,7 +1376,8 @@ var joy = {},
                     }
                     return pathMap.get(this);
                 },
-                draw: function (context) {
+
+                draw(context) {
                     var background = this.background(),
                         stroke = this.stroke(),
                         path = this.path();
@@ -1288,7 +1392,7 @@ var joy = {},
                             points = path[ind1];
                             context.moveTo(points[0], points[1]);
                             ind2 = 0;
-                            while (ind2 < points.length) 
+                            while (ind2 < points.length)
                                 context.lineTo(points[ind2++], points[ind2++]);
                         }
                         if (background) {
@@ -1303,7 +1407,8 @@ var joy = {},
                     }
                     return this.refreshed(true);
                 },
-                radius: function (newRadius) {
+
+                radius(newRadius) {
                     if (newRadius)
                         throw cannotBeSetError([
                             this,
@@ -1312,20 +1417,27 @@ var joy = {},
                         ]);
                     return renderer.prototype.radius.call(this);
                 }
+
             }))
+
         );
+
     })(),
 
     // polygon              factories
     // inherits from shape  factories
     //
+    // eslint-disable-next-line no-unused-vars
     polygon = joy.polygon = createFactory(
+
         function Joy2DPolygon(points) {
             shape.constructor.call(this);
             if (points) this.points(points);
         },
+
         createObj(shape.prototype, props({
-            points: function (newPoints) {
+
+            points(newPoints) {
                 if (newPoints) {
                     shape.prototype.path.call(
                         this,
@@ -1336,7 +1448,8 @@ var joy = {},
                 var points = this.path()[0];
                 return points.slice(0, points.length - 2);
             },
-            path: function (newPath) {
+
+            path(newPath) {
                 if (newPath) throw cannotBeSetError([
                     this,
                     'path',
@@ -1344,23 +1457,30 @@ var joy = {},
                 ]);
                 return shape.prototype.path.call(this);
             }
+
         }))
+
     ),
 
     // text                     factories
     // inherits from renderer   factories
     //
+    // eslint-disable-next-line no-unused-vars
     text = joy.text = (function () {
-        var contentMap = weakmap(),
-            colorMap = weakmap(),
-            strokeMap = weakmap;
+
+        // var contentMap = weakmap(),
+        //     colorMap = weakmap(),
+        //     strokeMap = weakmap;
         return createFactory(
+
             function Joy2DText(content) {
                 renderer.constructor.call(this);
                 this.content(content);
             },
+
             createObj(renderer.prototype, props({
-                radius: function (newRadius) {
+
+                radius(newRadius) {
                     if (newRadius)
                         throw cannotBeSetError([
                             this,
@@ -1369,12 +1489,13 @@ var joy = {},
                         ]);
                     return renderer.prototype.radius.call(this);
                 }
+
             }))
+
         );
+
     })();
 
 /* -------------------------------------------------------------------------- */
 
-return joy;
-
-})(dev);
+})();
