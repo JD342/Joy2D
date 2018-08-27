@@ -486,7 +486,6 @@ const
             rootParentMap = weakmap(),
             nameMap = weakmap(),
             visibleMap = weakmap(),
-            zIndexMap = weakmap(),
             collisionRadiusMap = weakmap();
 
         return createFactory({
@@ -518,7 +517,10 @@ const
             },
 
             parent(newParent) {
-                if (newParent) newParent.append(this);
+                if (newParent === null) return this.remove();
+                if (newParent instanceof object.constructor)
+                    return this.appendTo(newParent);
+                if (newParent !== undefined) return this;
                 return parentMap.get(this);
             },
 
@@ -594,7 +596,7 @@ const
 
             zIndex(newZIndex) {
                 if (typeof newZIndex === 'number') {
-                    zIndexMap.get(this).value = newZIndex;
+                    zIndexMap.get(this).relative = newZIndex;
                     refreshAbsoluteZIndexOf(this);
                     return this;
                 }
@@ -924,6 +926,40 @@ const
                 );
             }
 
+            /*
+            // TODO debug this, it's not working
+            clone() {
+                return (
+                    object(this.name())
+                        .parent(this.parent())
+                        .zIndex(this.zIndex())
+                        .transformation(this.transformation())
+                        .components(this.components())
+                        .children(this.children().map(c => c.clone()))
+                );
+            },
+
+            repeat(count, translation, rotation) {
+                var i = count;
+                var sample = this;
+                const arr = [];
+                while (i--) {
+                    const obj = sample.clone();
+                    if (translation) obj.translate(translation);
+                    if (rotation) obj.rotate(rotation);
+                    arr.push(obj);
+                }
+                return arr;
+            },
+
+            circularRepeat(count, radius) {
+                const k = count + 1;
+                const translation = [2 * radius * sin(pi / k), 0];
+                const rotation = pi * (1 / k - 1 / 4);
+                return this.repeat(count, translation, rotation);
+            }
+            */
+
         });
 
     })(),
@@ -944,6 +980,20 @@ const
                 if (child instanceof dynamicObject.constructor)
                     child.update(deltaTime);
         })
+
+        /*
+        // TODO debug this, it's not working
+        clone() {
+            return (
+                dynamicObject(this.name())
+                    .zIndex(this.zIndex())
+                    .transformation(this.transformation())
+                    .components(this.components())
+                    .parent(this.parent())
+                    .children(this.children().map(c => c.clone()))
+            );
+        }
+        */
 
     }),
 
@@ -1020,7 +1070,7 @@ const
                 return this.view().element().height;
             },
 
-            drawView() {
+            drawView(objects = [...this.rootParent().children()]) {
 
                 // define rendering area rectangle
                 var viewWidth = this.width(),
@@ -1031,7 +1081,6 @@ const
                         viewHeight
                     ],
                     // get visible objects
-                    objects = this.rootParent().children(),
                     visibleObjects = [],
                     ind = 0,
                     currObj;
@@ -1356,7 +1405,7 @@ const
                 var background = this.background(),
                     stroke = this.stroke(),
                     path = this.path();
-                if (background || stroke) {
+                if (path && (background || stroke)) {
                     context.beginPath();
                     for (
                         var ind1 = 0,
@@ -1400,7 +1449,6 @@ const
     // polygon              factories
     // inherits from shape  factories
     //
-    // eslint-disable-next-line no-unused-vars
     polygon = joy.polygon = createFactory({
 
         [$prototype]: shape.prototype,
@@ -1432,6 +1480,71 @@ const
         }
 
     }),
+
+    // rectangle                factories
+    // inherits from polygon    factories
+    //
+    // eslint-disable-next-line no-unused-vars
+    rectangle = joy.rectangle = (() => {
+
+        const $width = Symbol('Joy2DRectangle Width');
+        const $height = Symbol('Joy2DRectangle Height');
+
+        return createFactory({
+
+            [$prototype]: polygon.prototype,
+
+            [$constructor]: function Joy2DRectangle([w, h] = [1, 1]) {
+                polygon.constructor.call(this);
+                this.size([w, h]);
+            },
+
+            points(newPoints) {
+                if (newPoints) throw cannotBeSetError([
+                    this,
+                    'points',
+                    'points of a rectangle'
+                ]);
+                return polygon.prototype.points.call(this);
+            },
+
+            size(newSize) {
+                if (newSize === undefined) return [this[$width], this[$height]];
+                if (newSize && Symbol.iterator in newSize) {
+                    const [w, h] = newSize;
+                    if (typeof w !== 'number') return this;
+                    if (typeof h !== 'number') return this;
+                    this[$width] = w;
+                    this[$height] = h;
+                    const wHalf = w / 2;
+                    const hHalf = h / 2;
+                    polygon.prototype.points.call(this, [
+                        -wHalf, -hHalf,
+                        wHalf, -hHalf,
+                        wHalf, hHalf,
+                        -wHalf, hHalf
+                    ]);
+                }
+                return this;
+            },
+
+            w(newW) {
+                if (newW === undefined) return this[$width];
+                if (typeof newW === 'number')
+                    return this.size([newW, this[$height]]);
+                return this;
+            },
+
+            h(newH) {
+                if (newH === undefined) return this[$height];
+                if (typeof newH === 'number')
+                    return this.size([this[$width], newH]);
+                return this;
+            }
+
+        });
+
+    })(),
 
     // text                     factories
     // inherits from renderer   factories
