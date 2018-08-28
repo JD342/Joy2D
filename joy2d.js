@@ -1,6 +1,6 @@
 /*
 
-    Joy2D 003
+    JOY2D 003
     Copyright (c) 2014-2018 Nicola Fiori
 
     All rights reserved.
@@ -10,18 +10,16 @@
 'use strict';
 
 // requires:
-// - Deviser.js 003
-
-const joy = {};
+// - JOY Framework 001
 
 (() => {
 
 const
-    utils = joy.utils = {},
-    $constructor = dev.$constructor,
-    $prototype = dev.$prototype,
-    devUtils = dev.utils,
-    createFactory = dev.createFactory;
+    utils = J.utils,
+    $constructor = J.$constructor,
+    $prototype = J.$prototype,
+    joyfUtils = J.utils,
+    Factory = J.Factory;
 
 /* -- core utils ------------------------------------------------------------ */
 
@@ -73,20 +71,20 @@ const
     //
     st = setTimeout,
 
-    // dynamicMethod    core utils
-    // from Deviser.js  utils
+    // DynamicMethod        core utils
+    // from JOY Framework   utils
     //
-    dynamicMethod = devUtils.dynamicMethod,
+    DynamicMethod = joyfUtils.DynamicMethod,
 
-    // keys             core utils
-    // from Deviser.js  utils
+    // keys                 core utils
+    // from JOY Framework   utils
     //
-    keys = devUtils.keys,
+    keys = joyfUtils.keys,
 
-    // createEl         core utils
-    // from Deviser.js  utils
+    // createEl             core utils
+    // from JOY Framework   utils
     //
-    // createEl = devUtils.createEl,
+    // createEl = joyfUtils.createEl,
 
     // weakmap  core utils
     //
@@ -172,30 +170,30 @@ const
 /* -- core factories -------------------------------------------------------- */
 
 const
-    // devRoot
-    // from Deviser.js
-    devRoot = dev.root,
+    // Root
+    // from JOY Framework
+    Root = J.Root,
 
-    // collection       core factories
-    // from Deviser.js  factories
+    // Collection           core factories
+    // from JOY Framework   factories
     //
-    collection = dev.collection,
+    Collection = J.Collection,
 
-    // canvas2D         core factories
-    // from Deviser.js  factories
+    // Canvas2D             core factories
+    // from JOY Framework   factories
     //
-    canvas2D = dev.canvas2D,
+    Canvas2D = J.Canvas2D,
 
-    // error        core factories
+    // Err        core factories
     //
     // using:
     // - createObj  core utils
     //
-    error = createFactory({
+    Err = Factory({
 
         [$prototype]: Error.prototype,
 
-        [$constructor]: function Joy2DError(data) {
+        [$constructor]: function JOY2DError(data) {
             var obj = data[0];
             this.message = (
                 'Failed to execute "' +
@@ -203,7 +201,7 @@ const
                 '"" on a ' +
                 obj.constructor.name +
                 (
-                    obj instanceof object.constructor ?
+                    obj instanceof Object2D.constructor ?
                         ' called "' + obj.name() + '"'
                         : ''
                 ) +
@@ -215,18 +213,18 @@ const
 
     }),
 
-    // cannotBeSetError     core factories
-    // inherits from error  core factories
+    // CannotBeSetError     core factories
+    // inherits from Err  core factories
     //
     // using:
     // - createObj          core utils
     //
-    cannotBeSetError = createFactory({
+    CannotBeSetError = Factory({
 
-        [$prototype]: error.prototype,
+        [$prototype]: Err.prototype,
 
-        [$constructor]: function Joy2DCannotBeSetError(data) {
-            error.constructor.call(
+        [$constructor]: function JOY2DCannotBeSetError(data) {
+            Err.constructor.call(
                 this,
                 [
                     data[0],
@@ -238,18 +236,18 @@ const
 
     }),
 
-    // boudingRadiusError               core factories
-    // inherits from cannotBeSetError   core factories
+    // BoudingRadiusError               core factories
+    // inherits from CannotBeSetError   core factories
     //
     // using:
     // - createObj                      core utils
     //
-    boudingRadiusError = createFactory({
+    BoudingRadiusError = Factory({
 
-        [$prototype]: cannotBeSetError.prototype,
+        [$prototype]: CannotBeSetError.prototype,
 
-        [$constructor]: function Joy2DBoundingRadiusSetError(object) {
-            cannotBeSetError.constructor.call(
+        [$constructor]: function JOY2DBoundingRadiusSetError(object) {
+            CannotBeSetError.constructor.call(
                 this,
                 [object, 'boundingRadius', 'bounding radius of an object']
             );
@@ -257,18 +255,18 @@ const
 
     }),
 
-    // insertError          core factories
-    // inherits from error  core factories
+    // InsertError          core factories
+    // inherits from Err  core factories
     //
     // using:
     // - createObj          core utils
     //
-    insertError = createFactory({
+    InsertError = Factory({
 
-        [$prototype]: error.prototype,
+        [$prototype]: Err.prototype,
 
-        [$constructor]: function Joy2DInsertError(data) {
-            error.constructor.call(this, [data[0], 'insert', data[1]]);
+        [$constructor]: function JOY2DInsertError(data) {
+            Err.constructor.call(this, [data[0], 'insert', data[1]]);
         }
 
     });
@@ -454,20 +452,20 @@ const
 /* -- factories ------------------------------------------------------------- */
 
 const
-    // object                   factories
-    // inherits from collection core factories
+    // Object2D                 factories
+    // inherits from Collection core factories
     //
     // using:
     // - parentChildError       core factories
     // - notAChildError         core factories
     // - Str                    core utils
-    // - dynamicMethod          core utils
+    // - DynamicMethod          core utils
     // - pyth                   utils
     // - weakmap                utils
     // - setMaps                utils
     // - tToTAbsolute           utils
     //
-    object = joy.object = (() => {
+    Object2D = J.Object2D = (() => {
 
         function getItems(collection, factory) {
             var arr = [],
@@ -488,12 +486,12 @@ const
             visibleMap = weakmap(),
             collisionRadiusMap = weakmap();
 
-        return createFactory({
+        return Factory({
 
-            [$prototype]: collection.prototype,
+            [$prototype]: Collection.prototype,
 
-            [$constructor]: function Joy2DObject(name) {
-                collection.call(this);
+            [$constructor]: function JOY2DObject(name) {
+                Collection.call(this);
                 setMaps(this, [
                     nameMap, name || 'unnamed object',
                     parentMap, null,
@@ -518,14 +516,14 @@ const
 
             parent(newParent) {
                 if (newParent === null) return this.remove();
-                if (newParent instanceof object.constructor)
+                if (newParent instanceof Object2D.constructor)
                     return this.appendTo(newParent);
                 if (newParent !== undefined) return this;
                 return parentMap.get(this);
             },
 
             rootParent(newRootParent) {
-                if (newRootParent) throw cannotBeSetError([
+                if (newRootParent) throw CannotBeSetError([
                     this,
                     'rootParent',
                     'root parent of an object'
@@ -534,7 +532,7 @@ const
             },
 
             boundingRadius(newBoundingRadius) {
-                if (newBoundingRadius) throw boudingRadiusError(this);
+                if (newBoundingRadius) throw BoudingRadiusError(this);
                 var boundingRadius = boundingRadiusMap.get(this);
                 if (boundingRadius.refreshed) return boundingRadius.value;
                 var maxRadius = 0,
@@ -544,11 +542,11 @@ const
                     ind = this.length;
                 while (ind--)
                     // TODO fix bug
-                    // var obj1 = joy.object(),
-                    //     obj2 = joy.object().appendTo(obj1);
+                    // var obj1 = J.Object2D(),
+                    //     obj2 = J.Object2D().appendTo(obj1);
                     // obj1.add(obj2);
                     if ((currNode = this[ind]).visible()) {
-                        if (currNode instanceof object.constructor) {
+                        if (currNode instanceof Object2D.constructor) {
                             tr = currNode.transformation();
                             radius = (
                                 pyth(tr[0], tr[1]) +
@@ -787,7 +785,7 @@ const
             },
 
             insert(item, index) {
-                if (item instanceof object.constructor) {
+                if (item instanceof Object2D.constructor) {
                     // insert node
                     var currNode = this,
                         parent;
@@ -795,28 +793,28 @@ const
                         parent = parentMap.get(currNode);
                         if (!parent) break;
                         if ((currNode = parent) === item)
-                            throw insertError([
+                            throw InsertError([
                                 this,
-                                'a Joy2D object can\'t be both parent ' +
-                                'and child of another Joy2D object'
+                                'a JOY2D object can\'t be both parent ' +
+                                'and child of another JOY2D object'
                             ]);
                     }
                     item.remove();
-                    collection.prototype.insert.call(this, item, index);
+                    Collection.prototype.insert.call(this, item, index);
                     parentMap.set(item, this);
                     rootParentMap.set(item, currNode);
                     // var components = item.components();
                     refreshAbsoluteTransformationOf(item);
                 }
-                else if (item instanceof component.constructor) {
+                else if (item instanceof Component2D.constructor) {
                     // insert component
                     componentTargetsMap.get(item).add(this);
-                    collection.prototype.insert.call(this, item, index);
+                    Collection.prototype.insert.call(this, item, index);
                 }
-                else throw insertError([
+                else throw InsertError([
                     this,
-                    'only Joy2D objects and components can be inserted ' +
-                    'to a Joy2D object'
+                    'only JOY2D objects and components can be inserted ' +
+                    'to a JOY2D object'
                 ]);
                 refreshBoundingRadiusOf(this);
                 return this;
@@ -825,7 +823,7 @@ const
             remove(item) {
                 if (item !== undefined) {
                     if (this.has(item)) {
-                        if (item instanceof object.constructor) {
+                        if (item instanceof Object2D.constructor) {
                             // remove node
                             parentMap.set(item, null);
                             rootParentMap.set(item, null);
@@ -839,7 +837,7 @@ const
                         // remove component
                         else componentTargetsMap.get(item).delete(this);
                         refreshBoundingRadiusOf(this);
-                        collection.prototype.remove.call(this, item);
+                        Collection.prototype.remove.call(this, item);
                     }
                 }
                 else {
@@ -849,7 +847,7 @@ const
                 return this;
             },
 
-            destroy: dynamicMethod(function (time) {
+            destroy: DynamicMethod(function (time) {
                 if (time) {
                     st(this.destroy.bind(this), time);
                     return false;
@@ -864,7 +862,7 @@ const
             }),
 
             children(newChildren) {
-                var children = getItems(this, object);
+                var children = getItems(this, Object2D);
                 if (newChildren) {
                     children.forEach(this.remove.bind(this));
                     return this.add(...newChildren);
@@ -873,7 +871,7 @@ const
             },
 
             components(newComponents) {
-                var components = getItems(this, component);
+                var components = getItems(this, Component2D);
                 if (newComponents) {
                     components.forEach(this.remove.bind(this));
                     return this.add(...newComponents);
@@ -964,20 +962,20 @@ const
 
     })(),
 
-    // dynamicObject        factories
-    // inherits from object factories
+    // Dynamic2D              factories
+    // inherits from Object2D factories
     //
-    dynamicObject = joy.dynamicObject = createFactory({
+    Dynamic2D = J.Dynamic2D = Factory({
 
-        [$prototype]: object.prototype,
+        [$prototype]: Object2D.prototype,
 
-        [$constructor]: function Joy2DDynamicObject() {
-            object.constructor.call(this);
+        [$constructor]: function JOY2DDynamicObject() {
+            Object2D.constructor.call(this);
         },
 
-        update: dynamicMethod(function (deltaTime) {
+        update: DynamicMethod(function (deltaTime) {
             for (var child of this.children())
-                if (child instanceof dynamicObject.constructor)
+                if (child instanceof Dynamic2D.constructor)
                     child.update(deltaTime);
         })
 
@@ -985,7 +983,7 @@ const
         // TODO debug this, it's not working
         clone() {
             return (
-                dynamicObject(this.name())
+                Dynamic2D(this.name())
                     .zIndex(this.zIndex())
                     .transformation(this.transformation())
                     .components(this.components())
@@ -997,25 +995,25 @@ const
 
     }),
 
-    // camera                       factories
-    // inherits from dynamicObject  factories
+    // Camera2D                 factories
+    // inherits from Dynamic2D  factories
     //
     // eslint-disable-next-line no-unused-vars
-    camera = joy.camera = (() => {
+    Camera2D = J.Camera2D = (() => {
 
         var viewMap = weakmap();
 
-        return createFactory({
+        return Factory({
 
-            [$prototype]: dynamicObject.prototype,
+            [$prototype]: Dynamic2D.prototype,
 
-            [$constructor]: function Joy2DCamera(name) {
-                dynamicObject.constructor.call(this, name);
-                viewMap.set(this, canvas2D());
+            [$constructor]: function JOY2DCamera(name) {
+                Dynamic2D.constructor.call(this, name);
+                viewMap.set(this, Canvas2D());
             },
 
             view(newView) {
-                if (newView) throw cannotBeSetError([
+                if (newView) throw CannotBeSetError([
                     this,
                     'view',
                     'view of a camera'
@@ -1112,7 +1110,7 @@ const
                         component = components[ind];
                         levelIndex = null;
                         handler = (
-                            component instanceof renderer.constructor ?
+                            component instanceof Renderer2D.constructor ?
                                 1 :
                                 0
                         );
@@ -1198,10 +1196,10 @@ const
 
     })(),
 
-    // component    factories
-    // inherits from devRoot
+    // Component2D    factories
+    // inherits from Root
     //
-    component = joy.component = (() => {
+    Component2D = J.Component2D = (() => {
 
         function removeComponentFrom(target) {
             target.remove(this);
@@ -1214,19 +1212,19 @@ const
         var visibleMap = weakmap(),
             refreshedMap = weakmap();
 
-        return createFactory({
+        return Factory({
 
-            [$prototype]: devRoot.prototype,
+            [$prototype]: Root.prototype,
 
-            [$constructor]: function Joy2DComponent() {
-                devRoot.constructor.call(this);
+            [$constructor]: function JOY2DComponent() {
+                Root.constructor.call(this);
                 componentTargetsMap.set(this, set());
                 boundingRadiusMap.set(this, 0);
                 visibleMap.set(this, true);
             },
 
             boundingRadius(newBoundingRadius) {
-                if (newBoundingRadius) throw boudingRadiusError(this);
+                if (newBoundingRadius) throw BoudingRadiusError(this);
                 return boundingRadiusMap.get(this);
             },
 
@@ -1271,25 +1269,25 @@ const
 
     })(),
 
-    // renderer                 factories
-    // inherits from component  factories
+    // Renderer2D                 factories
+    // inherits from Component2D  factories
     //
-    renderer = joy.renderer = (() => {
+    Renderer2D = J.Renderer2D = (() => {
 
         var backgroundMap = weakmap(),
             strokeMap = weakmap();
 
-        return createFactory({
+        return Factory({
 
-            [$prototype]: component.prototype,
+            [$prototype]: Component2D.prototype,
 
-            [$constructor]: function Joy2DRenderer(/* drawer */) {
-                component.constructor.call(this);
-                this.refreshed(false).canvas = canvas2D();
+            [$constructor]: function JOY2DRenderer(/* drawer */) {
+                Component2D.constructor.call(this);
+                this.refreshed(false).canvas = Canvas2D();
             },
 
             draw() {
-                throw error([
+                throw Err([
                     this,
                     'draw',
                     'this renderer has no draw method assigned to it'
@@ -1328,16 +1326,16 @@ const
 
     })(),
 
-    // circle                   factories
-    // inherits from renderer   factories
+    // Circle2D                   factories
+    // inherits from Renderer2D   factories
     //
     // eslint-disable-next-line no-unused-vars
-    circle = joy.circle = createFactory({
+    Circle2D = J.Circle2D = Factory({
 
-        [$prototype]: renderer.prototype,
+        [$prototype]: Renderer2D.prototype,
 
-        [$constructor]: function Joy2DCircle(radius) {
-            renderer.constructor.call(this);
+        [$constructor]: function JOY2DCircle(radius) {
+            Renderer2D.constructor.call(this);
             if (radius) this.radius(radius);
         },
 
@@ -1365,19 +1363,19 @@ const
 
     }),
 
-    // shape                    factories
-    // inherits from renderer   factories
+    // Shape2D                    factories
+    // inherits from Renderer2D   factories
     //
-    shape = joy.shape = (() => {
+    Shape2D = J.Shape2D = (() => {
 
         var pathMap = weakmap();
 
-        return createFactory({
+        return Factory({
 
-            [$prototype]: renderer.prototype,
+            [$prototype]: Renderer2D.prototype,
 
-            [$constructor]: function Joy2DShape(path) {
-                renderer.constructor.call(this);
+            [$constructor]: function JOY2DShape(path) {
+                Renderer2D.constructor.call(this);
                 if (path) this.path(path);
             },
 
@@ -1394,7 +1392,7 @@ const
                             if (radius > maxRadius) maxRadius = radius;
                         }
                     }
-                    renderer.prototype.radius.call(this, maxRadius);
+                    Renderer2D.prototype.radius.call(this, maxRadius);
                     pathMap.set(this, newPath);
                     return this;
                 }
@@ -1434,33 +1432,33 @@ const
 
             radius(newRadius) {
                 if (newRadius)
-                    throw cannotBeSetError([
+                    throw CannotBeSetError([
                         this,
                         'radius',
                         'radius of a shape'
                     ]);
-                return renderer.prototype.radius.call(this);
+                return Renderer2D.prototype.radius.call(this);
             }
 
         });
 
     })(),
 
-    // polygon              factories
-    // inherits from shape  factories
+    // Polygon2D              factories
+    // inherits from Shape2D  factories
     //
-    polygon = joy.polygon = createFactory({
+    Polygon2D = J.Polygon2D = Factory({
 
-        [$prototype]: shape.prototype,
+        [$prototype]: Shape2D.prototype,
 
-        [$constructor]: function Joy2DPolygon(points) {
-            shape.constructor.call(this);
+        [$constructor]: function JOY2DPolygon(points) {
+            Shape2D.constructor.call(this);
             if (points) this.points(points);
         },
 
         points(newPoints) {
             if (newPoints) {
-                shape.prototype.path.call(
+                Shape2D.prototype.path.call(
                     this,
                     [newPoints.concat(newPoints[0], newPoints[1])]
                 );
@@ -1471,41 +1469,41 @@ const
         },
 
         path(newPath) {
-            if (newPath) throw cannotBeSetError([
+            if (newPath) throw CannotBeSetError([
                 this,
                 'path',
                 'path of a polygon'
             ]);
-            return shape.prototype.path.call(this);
+            return Shape2D.prototype.path.call(this);
         }
 
     }),
 
-    // rectangle                factories
-    // inherits from polygon    factories
+    // Rectangle2D                factories
+    // inherits from Polygon2D    factories
     //
     // eslint-disable-next-line no-unused-vars
-    rectangle = joy.rectangle = (() => {
+    Rectangle2D = J.Rectangle2D = (() => {
 
-        const $width = Symbol('Joy2DRectangle Width');
-        const $height = Symbol('Joy2DRectangle Height');
+        const $width = Symbol('JOY2DRectangle Width');
+        const $height = Symbol('JOY2DRectangle Height');
 
-        return createFactory({
+        return Factory({
 
-            [$prototype]: polygon.prototype,
+            [$prototype]: Polygon2D.prototype,
 
-            [$constructor]: function Joy2DRectangle([w, h] = [1, 1]) {
-                polygon.constructor.call(this);
+            [$constructor]: function JOY2DRectangle([w, h] = [1, 1]) {
+                Polygon2D.constructor.call(this);
                 this.size([w, h]);
             },
 
             points(newPoints) {
-                if (newPoints) throw cannotBeSetError([
+                if (newPoints) throw CannotBeSetError([
                     this,
                     'points',
                     'points of a rectangle'
                 ]);
-                return polygon.prototype.points.call(this);
+                return Polygon2D.prototype.points.call(this);
             },
 
             size(newSize) {
@@ -1518,7 +1516,7 @@ const
                     this[$height] = h;
                     const wHalf = w / 2;
                     const hHalf = h / 2;
-                    polygon.prototype.points.call(this, [
+                    Polygon2D.prototype.points.call(this, [
                         -wHalf, -hHalf,
                         wHalf, -hHalf,
                         wHalf, hHalf,
@@ -1546,32 +1544,32 @@ const
 
     })(),
 
-    // text                     factories
-    // inherits from renderer   factories
+    // Text2D                       factories
+    // inherits from Renderer2D     factories
     //
     // eslint-disable-next-line no-unused-vars
-    text = joy.text = (() => {
+    Text2D = J.Text2D = (() => {
 
         // var contentMap = weakmap(),
         //     colorMap = weakmap(),
         //     strokeMap = weakmap;
-        return createFactory({
+        return Factory({
 
-            [$prototype]: renderer.prototype,
+            [$prototype]: Renderer2D.prototype,
 
-            [$constructor]: function Joy2DText(content) {
-                renderer.constructor.call(this);
+            [$constructor]: function JOY2DText(content) {
+                Renderer2D.constructor.call(this);
                 this.content(content);
             },
 
             radius(newRadius) {
                 if (newRadius)
-                    throw cannotBeSetError([
+                    throw CannotBeSetError([
                         this,
                         'radius',
                         'radius of a text'
                     ]);
-                return renderer.prototype.radius.call(this);
+                return Renderer2D.prototype.radius.call(this);
             }
 
         });
